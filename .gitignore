@@ -1,0 +1,16 @@
+site/
+notes/site/
+notes/.vitepress/dist/
+notes/.vitepress/cache/
+.cache/
+notes/.cache/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+node_modules/
+notes/node_modules/
+rebuild/node_modules/
+*.log
+.DS_Store
