@@ -32,8 +32,10 @@ git checkout main   # 或 master / 你的开发分支
 | Tag | 状态 | 对应文档 | 本阶段结束时应有什么 |
 |-----|------|----------|----------------------|
 | `stage-00-bootstrap` | 已发布 | [基线](/baseline)、[00](/guide/00-env)、[01](/guide/01-read-source)、[02](/guide/02-hello-bun) | VitePress 文档站可预览；`rebuild/` 最小 CLI（`help` / `version` / `hello`）能跑 |
-| `stage-01-what-is-agent` | 已发布（并入 `stage-02-chat`） | [03 认识 Agent](/guide/03-what-is-agent) | 迷你 `AgentInfo` + registry；`agent list/get/resolve`（不调 LLM） |
-| `stage-02-chat` | 已发布 | [03](/guide/03-what-is-agent)、[04 最小 Chat](/guide/04-chat-llm) | Zen 免费对话 + agent.system；`bun run chat`；`scripts/bun.sh` 固定 1.4.x |
+| `stage-01-what-is-agent` | 已发布 | [03 认识 Agent](/guide/03-what-is-agent) | 迷你 `AgentInfo` + registry；`agent list/get/resolve` |
+| `stage-02-chat` | 已发布 | [04 最小 Chat](/guide/04-chat-llm) | Zen 免费对话；`bun run chat`；`scripts/bun.sh` 固定 1.4.x |
+
+> 说明：01 与 02 在同一次提交落地，因此两个 tag 目前指向**同一 commit**；之后阶段会各自单独打 tag。学习时仍按 03 → 04 文档顺序读。
 | `stage-03-…` | 计划中 | 待定 | tool / 权限等；按指南追加 |
 
 > **状态说明**：「计划中」= 名字已定、尚未打 tag；「已发布」= 仓库里已有该 tag，可 checkout。
