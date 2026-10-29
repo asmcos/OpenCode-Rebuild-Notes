@@ -8,7 +8,7 @@
 
 | 项 | 说明 |
 |----|------|
-| 命名 | `stage-NN-短名`，`NN` 两位数字，与指南编号大致对齐 |
+| 命名 | `stage-NN-短名`，`NN` 两位数字 |
 | 何时打 tag | 该阶段文档验收清单通过，且 `rebuild/` 行为稳定之后——**不提前打** |
 | 节奏 | 一次只做一个小阶段，慢慢迭代；附录可先写计划，状态栏再从「计划」改为「已发布」 |
 | 查阅 | `git tag -l 'stage-*'` |
@@ -17,28 +17,25 @@
 
 ```bash
 cd ~/dev/OpenCode-Rebuild-Notes
-git fetch --tags          # 若从远程学
-git checkout stage-00-bootstrap   # 换成表里的名字
+git fetch --tags
+git checkout stage-01-chat   # 换成表里的名字
 ```
 
 回到最新学习分支（名称以你仓库为准）：
 
 ```bash
-git checkout main   # 或 master / 你的开发分支
+git checkout main
 ```
 
 ## 阶段对照表
 
 | Tag | 状态 | 对应文档 | 本阶段结束时应有什么 |
 |-----|------|----------|----------------------|
-| `stage-00-bootstrap` | 已发布 | [基线](/baseline)、[00](/guide/00-env)、[01](/guide/01-read-source)、[02](/guide/02-hello-bun) | VitePress 文档站可预览；`rebuild/` 最小 CLI（`help` / `version` / `hello`）能跑 |
-| `stage-01-what-is-agent` | 已发布 | [03 认识 Agent](/guide/03-what-is-agent) | 迷你 `AgentInfo` + registry；`agent list/get/resolve` |
-| `stage-02-chat` | 已发布 | [04 最小 Chat](/guide/04-chat-llm) | Zen 免费对话；`bun run chat`；`scripts/bun.sh` 固定 1.4.x |
+| `stage-00-bootstrap` | 已发布 | [基线](/baseline)、[00](/guide/00-env)、[01](/guide/01-read-source)、[02](/guide/02-hello-bun) | VitePress 可预览；最小 CLI（`help` / `version` / `hello`） |
+| `stage-01-chat` | 已发布 | [03 认识 Agent](/guide/03-what-is-agent)、[04 最小 Chat](/guide/04-chat-llm) | 迷你 agent + Zen 免费对话；`bun run chat`；`scripts/bun.sh` → Bun 1.4.x |
+| `stage-02-…` | 计划中 | 待定 | 下一阶段（例如 tool / 权限）；**尚未打 tag** |
 
-> 说明：01 与 02 在同一次提交落地，因此两个 tag 目前指向**同一 commit**；之后阶段会各自单独打 tag。学习时仍按 03 → 04 文档顺序读。
-| `stage-03-…` | 计划中 | 待定 | tool / 权限等；按指南追加 |
-
-> **状态说明**：「计划中」= 名字已定、尚未打 tag；「已发布」= 仓库里已有该 tag，可 checkout。
+> **状态说明**：「计划中」= 名字未定或尚未打 tag；「已发布」= 仓库里已有该 tag，可 checkout。
 
 ## 维护方式
 
