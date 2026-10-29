@@ -2,7 +2,7 @@
 
 目标：弄清 OpenCode 里的 **Agent** 不是「整个程序」，而是一份**可切换的角色配置**（名字、系统提示、模式、权限等）。读上游契约，再在 `rebuild/` 里放几个迷你 agent，用 CLI 列出来。
 
-预计时间：40–60 分钟。对应 tag 计划：`stage-01-what-is-agent`（收口后再打）。
+预计时间：40–60 分钟。与 [04](/guide/04-chat-llm) 一并收口为 tag：`stage-01-chat`。
 
 ::: tip 从这里开始碰 agent
 环境与 bun CLI 已经能跑（[00](/guide/00-env)–[02](/guide/02-hello-bun)）。后面章节都围着「怎么做一个 agent」展开；不必再单独学命令表——`rebuild/src/commands/` 里的分发代码可自行翻看。

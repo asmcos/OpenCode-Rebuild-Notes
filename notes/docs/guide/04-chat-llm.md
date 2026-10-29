@@ -2,10 +2,10 @@
 
 目标：用上一章的 **agent.system** 当角色提示，**默认走 OpenCode Zen 免费模型**，**不必配置个人 API Key**，和 `zen-free-agent` / `chat-zen-free.mjs` 同一类接法。
 
-预计时间：40–60 分钟。对应 tag 计划：`stage-02-chat`。
+预计时间：40–60 分钟。对应已发布 tag：`stage-01-chat`（含 03 的 agent 形状 + 本章 chat）。
 
-::: tip 和 stage-01 的关系
-[03 认识 Agent](/guide/03-what-is-agent) 只定义角色；**本章才接模型**。
+::: tip 和 03 的关系
+[03 认识 Agent](/guide/03-what-is-agent) 只定义角色；**本章才接模型**。两者同属 `stage-01-chat`。
 :::
 
 ## 4.1 默认：Zen 免费（无个人 Key）
