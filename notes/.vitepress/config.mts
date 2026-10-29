@@ -7,7 +7,8 @@ import { defineConfig, type UserConfig } from "vitepress"
  * OpenCode 复刻笔记 — VitePress
  * 基线: 2026-10-29 / upstream 2.2.0 / fa1260d6ca
  *
- * 个性化（如 base: '/ocnotes/'）请放进 gitignore 的 config.local.mts，
+ * 个性化（如 base: '/ocnotes/'）请放进 gitignore 的 config.local.mjs
+ * （用 .mjs，避免 Node 动态 import 不认 .mts）。
  * 不要改本文件顶部——避免和共享的 nav/sidebar 大纲总冲突。
  * 也可临时: VP_BASE=/ocnotes/ bun run build
  */
@@ -15,7 +16,7 @@ import { defineConfig, type UserConfig } from "vitepress"
 const root = dirname(fileURLToPath(import.meta.url))
 
 async function loadLocal(): Promise<UserConfig> {
-  const file = join(root, "config.local.mts")
+  const file = join(root, "config.local.mjs")
   if (!existsSync(file)) return {}
   const mod = await import(pathToFileURL(file).href)
   return (mod.default ?? {}) as UserConfig
@@ -30,7 +31,7 @@ export default defineConfig({
   srcDir: "docs",
   cleanUrls: true,
   lastUpdated: true,
-  // 默认根路径；个人部署目录用 config.local.mts 或 VP_BASE
+  // 默认根路径；个人部署目录用 config.local.mjs 或 VP_BASE
   base: process.env.VP_BASE || "/",
 
   themeConfig: {

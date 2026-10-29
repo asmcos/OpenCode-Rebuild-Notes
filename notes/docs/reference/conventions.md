@@ -37,10 +37,10 @@ bun run preview   # 预览构建产物
 
 做法二选一：
 
-1. 复制示例为本地文件（已 gitignore）：
+1. 复制示例为本地文件（已 gitignore，必须用 **`.mjs`**）：
 
 ```bash
-cp notes/.vitepress/config.local.mts.example notes/.vitepress/config.local.mts
+cp notes/.vitepress/config.local.mjs.example notes/.vitepress/config.local.mjs
 # 编辑其中的 base
 ```
 
@@ -50,7 +50,7 @@ cp notes/.vitepress/config.local.mts.example notes/.vitepress/config.local.mts
 VP_BASE=/ocnotes/ bun run build
 ```
 
-`config.local.mts` 里只放个性化字段，**不要**整份复制 nav/sidebar。
+`config.local.mjs` 里只放个性化字段，**不要**整份复制 nav/sidebar。
 
 ## 学习阶段 Tag
 
