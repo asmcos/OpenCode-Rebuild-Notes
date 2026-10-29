@@ -12,5 +12,7 @@ venv/
 node_modules/
 notes/node_modules/
 rebuild/node_modules/
+rebuild/.env
+.env
 *.log
 .DS_Store

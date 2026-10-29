@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Mini CLI entry.
+ * Mini CLI entry — dispatches via a handlers table.
  *
  * Inspired by (upstream relative paths):
  * - packages/cli/src/index.ts
@@ -9,35 +9,24 @@
  * Intentionally tiny: no Effect, no TUI, no server.
  */
 
+import { handlers, listCommands } from "./commands/handlers"
+
 const args = process.argv.slice(2)
-const command = args[0]
+let command = args[0]
+let rest = args.slice(1)
 
-if (!command || command === "help" || command === "--help" || command === "-h") {
-  console.log(`rebuild-cli — OpenCode rebuild scratch CLI
-
-Usage:
-  bun run src/index.ts <command>
-
-Commands:
-  help     Show this help
-  version  Print version
-  hello    Print a greeting (optionally: hello <name>)
-`)
-  process.exit(0)
+if (!command || command === "--help" || command === "-h") {
+  command = "help"
+  rest = []
 }
 
-if (command === "version") {
-  // Keep in sync with rebuild/package.json; later we can read the file like upstream version.ts
-  console.log("0.0.1")
-  process.exit(0)
+const load = handlers[command]
+if (!load) {
+  console.error(`unknown command: ${command}`)
+  console.error(`known: ${listCommands().join(", ")}`)
+  console.error(`try: bun run src/index.ts help`)
+  process.exit(1)
 }
 
-if (command === "hello") {
-  const name = args[1] ?? "opencode"
-  console.log(`hello, ${name}`)
-  process.exit(0)
-}
-
-console.error(`unknown command: ${command}`)
-console.error(`try: bun run src/index.ts help`)
-process.exit(1)
+const mod = await load()
+await mod.run(rest)

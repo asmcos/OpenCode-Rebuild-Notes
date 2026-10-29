@@ -122,8 +122,8 @@ process.exit(1)
 对照说明：
 
 - shebang 与上游 `packages/cli/src/index.ts` 第一行同思路  
-- 上游用 `Runtime.handlers` 懒加载大量命令；我们用最直白的 `if`，下一步再谈「命令表」  
-- 版本暂时写死；上游有 `packages/cli/src/version.ts`，以后再学  
+- 上游用 `Runtime.handlers` 懒加载大量命令；入门用 `if` 即可。仓库里若已拆成 `commands/handlers`，可自行翻看，不必单独成章  
+- 版本可先写死；后面可改成读 `package.json`（对照上游 `packages/cli/src/version.ts`）
 
 ## 2.5 运行验收
 
@@ -159,10 +159,10 @@ bun run dev nope; echo "exit=$?"
 |----|------------------|
 | bun 直接跑 TS 入口 | Effect、Layer、Observability |
 | `dev` 脚本指向 `src/index.ts` | `bin/opencode.cjs` 打包分发 |
-| 子命令分发的雏形 | `commands/handlers/**` 懒加载树 |
-| 文件头注明上游相对路径 | 真实 auth / session / service |
+| 子命令分发的雏形 | Effect、完整 handlers 树、auth / session / service |
+| 文件头注明上游相对路径 | 真实 LLM / agent 循环 |
 
-下一步（尚未展开，预告）：把 `hello` / `version` 拆成「命令名 → 模块」的小表，形状更接近 `packages/cli/src/index.ts` 里的 `Runtime.handlers`。
+下一步进入 agent：[03 认识 Agent](/guide/03-what-is-agent)。
 
 ## 验收清单
 
@@ -171,7 +171,7 @@ bun run dev nope; echo "exit=$?"
 - [ ] 你能指着注释说出对应的上游相对路径  
 - [ ] 清楚：这不是 OpenCode，只是复刻路上的第 1 个可运行脚印  
 
-本步完成后，可以停下来休息。下一篇会再拆命令表（仍然很小）。若文档站要刷新：
+本步完成后，可以停下来休息。下一篇开始讲 agent。若文档站要刷新：
 
 ```bash
 cd ~/dev/OpenCode-Rebuild-Notes/notes

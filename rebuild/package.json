@@ -5,6 +5,7 @@
   "type": "module",
   "packageManager": "bun@1.4.4",
   "scripts": {
-    "dev": "bun run src/index.ts"
+    "dev": "bash ../scripts/bun.sh run src/index.ts",
+    "chat": "bash ../scripts/bun.sh run src/index.ts chat"
   }
 }

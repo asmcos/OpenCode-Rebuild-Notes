@@ -13,19 +13,29 @@
 
 详情见文档站 [基线锁定](notes/docs/baseline.md)。
 
+## Bun 1.4.4
+
+仓库脚本通过 `scripts/bun.sh` **优先使用** `$HOME/.bun/bin/bun`（避免系统旧 bun）。建议把该目录放到 PATH 最前：
+
+```bash
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+```
+
 ## 快速开始
 
 ```bash
-# 1. 文档预览（VitePress，可导出静态站）
+# 1. 文档预览
 cd notes
 bun install
 bun run dev
-# 浏览器打开终端提示的地址，一般是 http://127.0.0.1:5173
+# http://127.0.0.1:5173
 
-# 2. 跑最小复刻 CLI
+# 2. 复刻 CLI + Zen 免费 chat（默认无个人 Key）
 cd ../rebuild
 bun run dev
 bun run dev hello
+bun run chat --agent build "只回复：OK"
 ```
 
 完整步骤从文档 **00 环境准备** 开始，不要跳。
@@ -33,22 +43,17 @@ bun run dev hello
 ## 目录
 
 ```text
-notes/           # VitePress：.vitepress/ + docs/
-rebuild/         # 复刻代码（由小到大）
+scripts/bun.sh   # 固定优先 Bun 1.4.x
+notes/           # VitePress
+rebuild/         # 复刻代码
 ```
 
 上游源码请单独克隆；文档中的出处均为相对上游根目录的路径。
 
 ## 生成静态 HTML
 
-可以。VitePress 构建产物是纯静态文件：
-
 ```bash
 cd notes
 bun run build
 # 输出: notes/.vitepress/dist/
-
-bun run preview   # 本地预览构建结果
 ```
-
-把 `dist/` 部署到任意静态托管即可。

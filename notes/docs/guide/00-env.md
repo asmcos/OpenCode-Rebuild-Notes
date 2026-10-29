@@ -77,21 +77,25 @@ which bun
 curl -fsSL https://bun.sh/install | bash -s "bun-v1.4.4"
 ```
 
-装完后让当前 shell 认到 bun（按安装脚本提示，常见是）：
+装完后让 **`$HOME/.bun/bin` 排在 PATH 最前**（避免系统里旧的 `/usr/bin/bun` 1.3.x 抢先）：
 
 ```bash
-source ~/.bashrc
-# 或
+# 写入 ~/.bashrc（或 ~/.zshrc），然后 source 一次
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 ```
 
-再核对必须一致：
+再核对：
 
 ```bash
+hash -r
+which bun
 bun --version
-# 应等于 packageManager 里的版本，例如 1.4.4
+# which 应类似 /home/你/.bun/bin/bun
+# version 应与 packageManager 一致，例如 1.4.4
 ```
+
+本仓库还提供 `scripts/bun.sh`：即使默认 `bun` 仍是旧版，`rebuild` / `notes` 的 npm scripts 也会**优先调用** `$HOME/.bun/bin/bun`（可用 `BUN_BIN=/path/to/bun` 覆盖）。
 
 已装过 bun、只需改版本：同样用上面带版本号的安装命令，或看 [bun 安装文档](https://bun.sh/docs/installation)。
 

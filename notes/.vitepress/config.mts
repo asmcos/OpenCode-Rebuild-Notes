@@ -52,6 +52,8 @@ export default defineConfig({
           { text: "00 环境准备", link: "/guide/00-env" },
           { text: "01 读懂源码仓库", link: "/guide/01-read-source" },
           { text: "02 第一个 bun 程序", link: "/guide/02-hello-bun" },
+          { text: "03 认识 Agent", link: "/guide/03-what-is-agent" },
+          { text: "04 最小 Chat", link: "/guide/04-chat-llm" },
         ],
       },
       {
@@ -77,6 +79,8 @@ export default defineConfig({
           { text: "00 环境准备", link: "/guide/00-env" },
           { text: "01 读懂源码仓库", link: "/guide/01-read-source" },
           { text: "02 第一个 bun 程序", link: "/guide/02-hello-bun" },
+          { text: "03 认识 Agent", link: "/guide/03-what-is-agent" },
+          { text: "04 最小 Chat", link: "/guide/04-chat-llm" },
         ],
       },
       {
