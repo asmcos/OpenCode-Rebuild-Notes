@@ -3,7 +3,7 @@
  * Prefer Zen free via zen-free.ts for this course by default.
  */
 
-export type ChatMessage = {
+export type SimpleMessage = {
   role: "system" | "user" | "assistant"
   content: string
 }
@@ -12,7 +12,7 @@ export type ChatCompletionInput = {
   baseURL: string
   apiKey: string
   model: string
-  messages: ChatMessage[]
+  messages: SimpleMessage[]
 }
 
 export async function chatCompletion(input: ChatCompletionInput): Promise<string> {

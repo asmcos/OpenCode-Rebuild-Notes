@@ -26,6 +26,7 @@
 | [02 第一个 bun 程序](/guide/02-hello-bun) | 在 `rebuild/` 里跑通最小 CLI |
 | [03 认识 Agent](/guide/03-what-is-agent) | 弄清 Agent 是「角色配置」，能 list/get 迷你 agent |
 | [04 最小 Chat](/guide/04-chat-llm) | 默认 Zen 免费模型对话（无个人 Key，同 zen-free-agent 思路） |
+| [05 工具 read](/guide/05-tool-read) | 模型可 tool_call → 本地读文件 → 再回答 |
 
 每做完一步，文档里都会有「验收清单」。全部勾上再往下走。
 

@@ -79,11 +79,11 @@ bun run dev chat
 
 ## 4.5 差距
 
-| 已有 | 尚未做 |
+| 已有 | 尚未做（见下一章） |
 |------|--------|
-| Zen 免费真实对话 | 完整 tool 执行循环（现仅占位 `read` 过门闸） |
+| Zen 免费真实对话 | 完整 tool 执行循环 → [05](/guide/05-tool-read) |
 | agent.system 差异 | permissions、TUI、持久 Session |
-| 与 zen-free-agent 同类接法 | Go 上游 `oc_sk_…`、本地 8787 代理服务 |
+| 与 zen-free-agent 同类接法 | Go 上游 / 更多工具 |
 
 ## 验收清单
 
@@ -91,3 +91,5 @@ bun run dev chat
 - [ ] 换 `--agent plan` 能感到 system 不同  
 - [ ] 知道 429 时优先查 Bun≥1.4 与 Zen 门闸字段  
 - [ ] 清楚：这是教学简化版，完整实现见上游 `aisdk` / `zen-free-agent`  
+
+下一步：[05 工具 read](/guide/05-tool-read)。

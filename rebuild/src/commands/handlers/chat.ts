@@ -1,21 +1,20 @@
 /**
- * Chat with a real model, using a mini agent's system prompt.
- *
- * Default: OpenCode Zen free (no personal API key) — same approach as zen-free-agent.
+ * Chat with a real model + optional tool loop (read).
  *
  * Inspired by (upstream / local example relative paths):
  * - packages/core/src/aisdk.ts
  * - packages/core/src/agent.ts
- * - chat-zen-free.mjs
- * - zen-free-agent/index.mjs
+ * - packages/core/src/tool/plugin/read.ts
+ * - packages/sdk/js/example/chat-zen-free.mjs
  */
 
 import * as readline from "node:readline/promises"
 import { stdin as input, stdout as output } from "node:process"
 import { resolve } from "../../agent/registry"
 import { loadLlmConfig } from "../../llm/config"
-import { chatCompletion, type ChatMessage } from "../../llm/openai-compatible"
-import { zenChat } from "../../llm/zen-free"
+import { chatCompletion } from "../../llm/openai-compatible"
+import type { ChatMessage } from "../../llm/messages"
+import { agentLoop } from "../../llm/agent-loop"
 
 /** Status lines — cyan on stdout (stderr often renders red and looks like failure). */
 const dim = (s: string) => `\x1b[36m${s}\x1b[0m`
@@ -61,6 +60,7 @@ export async function run(args: string[]) {
   info(`provider=${llm.provider}  agent=${agent.id}  model=${llm.model}  base=${llm.baseURL}`)
   if (llm.provider === "zen") {
     info("auth=Bearer public (Zen free — no personal API key)")
+    info("tools=read (cwd-scoped)")
   }
   info("type /exit to quit")
   console.log()
@@ -68,29 +68,38 @@ export async function run(args: string[]) {
   const askOnce = async (userText: string) => {
     messages.push({ role: "user", content: userText })
     try {
-      let reply: string
       if (llm.provider === "zen") {
-        const result = await zenChat({
+        await agentLoop({
           baseURL: llm.baseURL,
           model: llm.model,
           version: llm.version,
           messages,
+          cwd: process.cwd(),
           onDelta: (d) => process.stdout.write(d),
+          onTool: (name, args, result) => {
+            info(`[tool] ${name}(${args})`)
+            const preview = result.slice(0, 160).replace(/\n/g, " ")
+            info(`[tool] → ${preview}${result.length > 160 ? "…" : ""}`)
+          },
         })
-        reply = result.content
-        process.stdout.write("\n")
+        console.log()
       } else {
-        reply = await chatCompletion({
+        const reply = await chatCompletion({
           baseURL: llm.baseURL,
           apiKey: llm.apiKey!,
           model: llm.model,
-          messages,
+          messages: messages.filter(
+            (m): m is { role: "system" | "user" | "assistant"; content: string } =>
+              (m.role === "system" || m.role === "user" || m.role === "assistant") &&
+              typeof m.content === "string",
+          ),
         })
+        messages.push({ role: "assistant", content: reply })
         console.log(reply)
+        console.log()
       }
-      messages.push({ role: "assistant", content: reply })
-      console.log()
     } catch (err) {
+      // keep user message; drop incomplete assistant/tool turns is hard — pop user on hard fail
       messages.pop()
       const msg = err instanceof Error ? err.message : String(err)
       console.error("\nError:", msg)

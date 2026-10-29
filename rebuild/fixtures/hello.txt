@@ -1,0 +1,1 @@
+rebuild-fixture: hello from stage-02-tools

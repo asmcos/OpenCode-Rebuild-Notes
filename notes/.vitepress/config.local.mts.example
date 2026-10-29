@@ -1,0 +1,11 @@
+import type { UserConfig } from "vitepress"
+
+/**
+ * 复制为 config.local.mts（已 gitignore）后按需修改。
+ * 只放个性化项，不要复制 nav / sidebar。
+ */
+const local: UserConfig = {
+  base: "/ocnotes/",
+}
+
+export default local

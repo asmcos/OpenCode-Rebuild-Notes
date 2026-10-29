@@ -18,7 +18,9 @@ function seed() {
     id: "build",
     name: "build",
     description: "Default coding agent (mini)",
-    system: "You are a careful coding agent. Prefer small, correct changes.",
+    system:
+      "You are a careful coding agent. Prefer small, correct changes. " +
+      "When you need file contents, call the read tool with a path.",
     mode: "primary",
   })
 
@@ -26,7 +28,9 @@ function seed() {
     id: "plan",
     name: "plan",
     description: "Planning-only agent (mini)",
-    system: "You only plan. Do not edit files; propose steps instead.",
+    system:
+      "You only plan. Do not edit files; propose steps instead. " +
+      "You may use the read tool to inspect files before planning.",
     mode: "primary",
   })
 
@@ -34,7 +38,8 @@ function seed() {
     id: "explore",
     name: "explore",
     description: "Read-only explore subagent (mini)",
-    system: "You explore the codebase and report findings. Do not modify files.",
+    system:
+      "You explore the codebase with the read tool and report findings. Do not modify files.",
     mode: "subagent",
   })
 }

@@ -2,6 +2,8 @@ site/
 notes/site/
 notes/.vitepress/dist/
 notes/.vitepress/cache/
+notes/.vitepress/config.local.mts
+
 .cache/
 notes/.cache/
 __pycache__/
