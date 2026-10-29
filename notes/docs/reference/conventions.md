@@ -37,18 +37,28 @@ bun run preview   # 预览构建产物
 
 做法二选一：
 
-1. 复制示例为本地文件（已 gitignore，必须用 **`.mjs`**）：
+1. 复制示例为本地文件（已 gitignore，必须用 **`.mjs`**，且放在 **`notes/.vitepress/`**）：
 
 ```bash
-cp notes/.vitepress/config.local.mjs.example notes/.vitepress/config.local.mjs
-# 编辑其中的 base
+cd notes
+cp .vitepress/config.local.mjs.example .vitepress/config.local.mjs
+# 确认内容含: base: "/ocnotes/"
+bun run build
+# 构建日志应出现:
+#   [vitepress] loaded .../config.local.mjs
+#   [vitepress] base=/ocnotes/
 ```
 
-2. 或临时环境变量：
+若日志是 `base=/` 且没有 `loaded ...config.local.mjs`，说明本地文件不存在或路径不对。
+
+2. 或临时环境变量（不依赖本地文件）：
 
 ```bash
+cd notes
 VP_BASE=/ocnotes/ bun run build
 ```
+
+预览带 base 的站点时，要打开 **`/ocnotes/`** 路径，例如 `http://127.0.0.1:4173/ocnotes/`。
 
 `config.local.mjs` 里只放个性化字段，**不要**整份复制 nav/sidebar。
 

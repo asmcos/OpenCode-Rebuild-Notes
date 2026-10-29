@@ -13,16 +13,29 @@ import { defineConfig, type UserConfig } from "vitepress"
  * 也可临时: VP_BASE=/ocnotes/ bun run build
  */
 
-const root = dirname(fileURLToPath(import.meta.url))
-
-async function loadLocal(): Promise<UserConfig> {
-  const file = join(root, "config.local.mjs")
-  if (!existsSync(file)) return {}
-  const mod = await import(pathToFileURL(file).href)
-  return (mod.default ?? {}) as UserConfig
+function localConfigCandidates() {
+  // VitePress 加载 config 时 import.meta.url 可能不在 .vitepress/ 下，故同时试 cwd
+  return [
+    join(process.cwd(), ".vitepress", "config.local.mjs"),
+    join(dirname(fileURLToPath(import.meta.url)), "config.local.mjs"),
+  ]
 }
 
-const local = await loadLocal()
+async function loadLocal(): Promise<{ config: UserConfig; from?: string }> {
+  for (const file of localConfigCandidates()) {
+    if (!existsSync(file)) continue
+    const mod = await import(pathToFileURL(file).href + `?t=${Date.now()}`)
+    return { config: (mod.default ?? {}) as UserConfig, from: file }
+  }
+  return { config: {} }
+}
+
+const { config: local, from: localFrom } = await loadLocal()
+const base = (process.env.VP_BASE || local.base || "/") as string
+if (localFrom) {
+  console.info(`[vitepress] loaded ${localFrom}`)
+}
+console.info(`[vitepress] base=${base}`)
 
 export default defineConfig({
   lang: "zh-CN",
@@ -31,8 +44,8 @@ export default defineConfig({
   srcDir: "docs",
   cleanUrls: true,
   lastUpdated: true,
-  // 默认根路径；个人部署目录用 config.local.mjs 或 VP_BASE
-  base: process.env.VP_BASE || "/",
+  // 默认 "/"；个人目录：config.local.mjs 的 base，或环境变量 VP_BASE
+  base,
 
   themeConfig: {
     logo: undefined,
