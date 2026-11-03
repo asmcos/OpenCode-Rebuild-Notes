@@ -90,6 +90,8 @@ export default defineConfig({
           { text: "03 认识 Agent", link: "/guide/03-what-is-agent" },
           { text: "04 最小 Chat", link: "/guide/04-chat-llm" },
           { text: "05 工具 read", link: "/guide/05-tool-read" },
+          { text: "06 工具 write", link: "/guide/06-tool-write" },
+          { text: "07 权限 permissions", link: "/guide/07-permissions" },
         ],
       },
       {
@@ -118,6 +120,8 @@ export default defineConfig({
           { text: "03 认识 Agent", link: "/guide/03-what-is-agent" },
           { text: "04 最小 Chat", link: "/guide/04-chat-llm" },
           { text: "05 工具 read", link: "/guide/05-tool-read" },
+          { text: "06 工具 write", link: "/guide/06-tool-write" },
+          { text: "07 权限 permissions", link: "/guide/07-permissions" },
         ],
       },
       {

@@ -1,34 +1,45 @@
 /**
- * Mini `read` tool — text files under cwd only.
+ * Mini `read` tool — text files (cwd-relative or absolute/external).
  *
  * Inspired by (upstream relative paths):
  * - packages/core/src/tool/plugin/read.ts
- * - packages/core/src/tool/read-filesystem.ts
- *
- * No permissions / paging / images yet.
+ * - packages/core/src/file-access.ts  (authorizeRead)
  */
 
-import { isAbsolute, normalize, relative, resolve } from "node:path"
+import { authorizeRead } from "../permission/file-access"
+import {
+  PermissionBlockedError,
+  PermissionDeclinedError,
+  type PermissionRuntime,
+} from "../permission/assert"
+import { resolveToolPath } from "./paths"
 
 const MAX_BYTES = 64 * 1024
 
 export async function readFileTool(
   args: { path?: string; filePath?: string },
   cwd = process.cwd(),
+  permission?: PermissionRuntime,
 ): Promise<string> {
   const raw = args.path ?? args.filePath
-  if (!raw || typeof raw !== "string") {
-    return "Error: missing path"
+
+  let resolved
+  try {
+    if (permission) {
+      resolved = await authorizeRead(permission, raw, cwd)
+    } else {
+      const r = resolveToolPath(raw, cwd)
+      if (!r.ok) return r.error
+      resolved = r
+    }
+  } catch (err) {
+    if (err instanceof PermissionBlockedError || err instanceof PermissionDeclinedError) {
+      return `Error: ${err.message}`
+    }
+    return `Error: ${err instanceof Error ? err.message : String(err)}`
   }
 
-  const root = resolve(cwd)
-  const target = resolve(root, raw)
-  const rel = relative(root, target)
-  if (rel.startsWith("..") || isAbsolute(rel)) {
-    return `Error: path escapes working directory (${raw})`
-  }
-
-  const file = Bun.file(target)
+  const file = Bun.file(resolved.absolute)
   if (!(await file.exists())) {
     return `Error: file not found: ${raw}`
   }
@@ -47,9 +58,4 @@ export async function readFileTool(
   } catch (err) {
     return `Error: ${err instanceof Error ? err.message : String(err)}`
   }
-}
-
-/** Normalize for display */
-export function displayPath(p: string) {
-  return normalize(p)
 }

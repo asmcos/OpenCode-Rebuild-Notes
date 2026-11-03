@@ -1,6 +1,6 @@
-# 04 接真实模型：最小 Chat（Zen 免费）
+# 04 接真实模型：最小 Chat
 
-目标：用上一章的 **agent.system** 当角色提示，**默认走 OpenCode Zen 免费模型**，**不必配置个人 API Key**，和 `zen-free-agent` / `chat-zen-free.mjs` 同一类接法。
+目标：用上一章的 **agent.system** 当角色提示，默认走 **本地 OpenAI 兼容网关**（`http://127.0.0.1:8787/v1`，如 zen-free-agent），**不必配置个人 API Key**。Zen 直连仍可选，但常限流。
 
 预计时间：40–60 分钟。对应已发布 tag：`stage-01-chat`（含 03 的 agent 形状 + 本章 chat）。
 
@@ -8,60 +8,73 @@
 [03 认识 Agent](/guide/03-what-is-agent) 只定义角色；**本章才接模型**。两者同属 `stage-01-chat`。
 :::
 
-## 4.1 默认：Zen 免费（无个人 Key）
+## 4.1 默认：本地 OpenAI 兼容网关（`:8787`）
 
-对照（在你的上游 OpenCode 克隆里，相对路径）：
+Zen 直连经常 429。推荐先起 **zen-free-agent** 本地 API（上游克隆里），再让 rebuild 当客户端：
 
-- `chat-zen-free.mjs`
-- `zen-free-agent/index.mjs`、`zen-free-agent/README.md`
+```bash
+# 终端 1（在 opencode 仓库）
+~/.bun/bin/bun zen-free-agent/index.mjs --api-only
+# → http://127.0.0.1:8787/v1
+```
 
-要点：
+对照：`zen-free-agent/README.md`（OpenAI 兼容接口一节）。
 
-| 项 | 说明 |
-|----|------|
-| 鉴权 | `Authorization: Bearer public`（客户端门闸，不是你的付费 Key） |
-| 运行时 | **必须 Bun ≥ 1.4**（Node / 旧 Bun 容易 429） |
-| 请求 | 必须 `stream: true`；带名为 `read` 的 tool；system 里含 `<env>…Working directory…</env>`；`ses_` 会话 id |
-| 模型 | 免费模型，例如 `flint-40b-free` |
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/v1/models` | 列模型 |
+| POST | `/v1/chat/completions` | 对话（`stream: true/false`） |
 
-上游完整栈更重：`packages/core/src/aisdk.ts` 等。我们只复刻「能对话」的最短客户端。
+```bash
+curl -s http://127.0.0.1:8787/v1/models
 
-## 4.2 直接聊（无需 .env）
+curl -s http://127.0.0.1:8787/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"beam-free","messages":[{"role":"user","content":"只回复：OK"}]}'
 
-`rebuild` 的脚本已通过 `scripts/bun.sh` 优先使用 **`$HOME/.bun/bin/bun`（1.4.x）**，不必每次手写路径。
+curl -N http://127.0.0.1:8787/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"beam-free","stream":true,"messages":[{"role":"user","content":"你好"}]}'
+```
+
+仍可选 `REBUILD_LLM_PROVIDER=zen` 直连 Zen（门闸字段见源码 `zen-free.ts`），但课程默认改为 **`local`**。
+
+## 4.2 选模型 + 聊天
+
+`rebuild` 的脚本已通过 `scripts/bun.sh` 优先使用 **`$HOME/.bun/bin/bun`（1.4.x）**。
 
 ```bash
 cd ~/dev/OpenCode-Rebuild-Notes/rebuild
 
-# 交互多轮（/exit 结束）
-bun run chat
-# 或
-bun run dev chat --agent plan
+bun run models              # 列出 /v1/models，可交互选择
+bun run models use beam-free
 
-# 单次
-bun run dev chat --agent build "用一句话介绍你的职责"
+bun run chat                # 默认 provider=local
+bun run chat --model beam-free "只回复：OK"
+bun run chat --no-stream --agent build "你好"
 ```
 
-可选环境变量：
+选择结果写入 `rebuild/.rebuild-llm.json`（gitignore）。
 
 | 变量 | 含义 |
 |------|------|
-| `REBUILD_LLM_MODEL` / `MODEL` | 默认 `flint-40b-free` |
-| `OPENCODE_ZEN_URL` | 默认 `https://opencode.ai/inference/openai/v1` |
-| `OPENCODE_VERSION` | User-Agent 里的版本，默认 `2.2.0` |
-| `BUN_BIN` | 覆盖 bun 可执行文件路径 |
-
+| `REBUILD_LLM_PROVIDER` | `local`（默认）/ `zen` / `openai` |
+| `REBUILD_LLM_BASE_URL` | 默认 `http://127.0.0.1:8787/v1` |
+| `REBUILD_LLM_MODEL` / `MODEL` | 默认 `beam-free`（可被 prefs 覆盖） |
+| `BUN_BIN` | 覆盖 bun 路径 |
+| `OPENCODE_ZEN_URL` | 仅 `provider=zen` 时用 |
+| `OPENCODE_VERSION` | Zen User-Agent 版本，默认 `2.2.0` |
 
 ## 4.3 代码落点
 
 | 本仓库路径 | 作用 |
 |------------|------|
-| `rebuild/src/llm/zen-free.ts` | Zen 免费流式 chat + 门闸字段 |
-| `rebuild/src/llm/zen-id.ts` | `ses_` + descending id |
-| `rebuild/src/llm/config.ts` | 默认 `provider=zen` |
+| `rebuild/src/llm/openai-stream.ts` | OpenAI 兼容 `/models` + chat（流式/非流式 + tools） |
+| `rebuild/src/llm/prefs.ts` | 本地模型偏好 `.rebuild-llm.json` |
+| `rebuild/src/llm/config.ts` | 默认 `provider=local` → `:8787` |
+| `rebuild/src/llm/zen-free.ts` | Zen 免费流式（可选） |
+| `rebuild/src/commands/handlers/models.ts` | `models` / `models use` |
 | `rebuild/src/commands/handlers/chat.ts` | 绑定 agent + REPL |
-
-若出现 429 / FreeUsageLimit，按 stderr 提示检查：Bun 版本、stream、read tool、ses_、`<env>`、User-Agent。
 
 ## 4.4 可选：自带 Key 的 OpenAI 兼容端
 
@@ -72,7 +85,7 @@ REBUILD_LLM_PROVIDER=openai \
 REBUILD_LLM_API_KEY=sk-... \
 REBUILD_LLM_BASE_URL=https://api.openai.com/v1 \
 REBUILD_LLM_MODEL=gpt-4o-mini \
-bun run dev chat
+bun run chat
 ```
 
 示例见 `rebuild/.env.example`。不要提交 `.env`。
@@ -81,15 +94,16 @@ bun run dev chat
 
 | 已有 | 尚未做（见下一章） |
 |------|--------|
-| Zen 免费真实对话 | 完整 tool 执行循环 → [05](/guide/05-tool-read) |
+| 本地网关真实对话 + 选模型 | 完整 tool 执行循环 → [05](/guide/05-tool-read) |
 | agent.system 差异 | permissions、TUI、持久 Session |
 | 与 zen-free-agent 同类接法 | Go 上游 / 更多工具 |
 
 ## 验收清单
 
-- [ ] `bun run chat`（经 `scripts/bun.sh` 用上 1.4.x），**不配个人 Key** 能拿到回复
-- [ ] 换 `--agent plan` 能感到 system 不同  
-- [ ] 知道 429 时优先查 Bun≥1.4 与 Zen 门闸字段  
-- [ ] 清楚：这是教学简化版，完整实现见上游 `aisdk` / `zen-free-agent`  
+- [ ] 网关已起：`curl -s http://127.0.0.1:8787/v1/models` 能看到模型
+- [ ] `bun run models` 能列出并选择模型
+- [ ] `bun run chat` **不配个人 Key** 能拿到回复
+- [ ] 换 `--agent plan` 能感到 system 不同
+- [ ] 清楚：这是教学简化版，完整实现见上游 `aisdk` / `zen-free-agent`
 
 下一步：[05 工具 read](/guide/05-tool-read)。

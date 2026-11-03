@@ -2,26 +2,35 @@
  * In-memory agent registry (no Effect / Bus / State yet).
  *
  * Inspired by (upstream relative paths):
- * - packages/core/src/agent.ts       (Agent.Service list / get / resolve)
- * - packages/schema/src/agent.ts     (Agent.Info.default, default id "build")
+ * - packages/core/src/agent.ts
+ * - packages/schema/src/agent.ts     (Agent.Info.default permissions)
+ * - packages/core/src/plugin/agent.ts (explore permissions)
  */
 
 import type { AgentInfo } from "./info"
+import {
+  DEFAULT_PERMISSIONS,
+  EXPLORE_PERMISSIONS,
+  PLAN_PERMISSIONS,
+} from "../permission/evaluate"
 
 const agents = new Map<string, AgentInfo>()
 
 function seed() {
   if (agents.size > 0) return
 
-  // Upstream default agent id is often "build" — see packages/core/src/agent.ts (defaultID)
   register({
     id: "build",
     name: "build",
     description: "Default coding agent (mini)",
     system:
       "You are a careful coding agent. Prefer small, correct changes. " +
-      "When you need file contents, call the read tool with a path.",
+      "Use read/write tools to do the work. When the user asks to create or save a file, " +
+      "call write immediately with a reasonable default — do NOT ask clarifying questions " +
+      "about style or type unless they explicitly ask for options. " +
+      "Permission prompts are handled by the harness, not by you.",
     mode: "primary",
+    permissions: [...DEFAULT_PERMISSIONS],
   })
 
   register({
@@ -29,9 +38,10 @@ function seed() {
     name: "plan",
     description: "Planning-only agent (mini)",
     system:
-      "You only plan. Do not edit files; propose steps instead. " +
+      "You only plan. Do not call write or edit files; propose steps instead. " +
       "You may use the read tool to inspect files before planning.",
     mode: "primary",
+    permissions: [...PLAN_PERMISSIONS],
   })
 
   register({
@@ -39,8 +49,10 @@ function seed() {
     name: "explore",
     description: "Read-only explore subagent (mini)",
     system:
-      "You explore the codebase with the read tool and report findings. Do not modify files.",
+      "You explore the codebase with the read tool and report findings. " +
+      "Do not call write or modify files.",
     mode: "subagent",
+    permissions: [...EXPLORE_PERMISSIONS],
   })
 }
 

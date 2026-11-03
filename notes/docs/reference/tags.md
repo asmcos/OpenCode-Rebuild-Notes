@@ -34,7 +34,11 @@ git checkout main
 | `stage-00-bootstrap` | 已发布 | [基线](/baseline)、[00](/guide/00-env)、[01](/guide/01-read-source)、[02](/guide/02-hello-bun) | VitePress 可预览；最小 CLI（`help` / `version` / `hello`） |
 | `stage-01-chat` | 已发布 | [03 认识 Agent](/guide/03-what-is-agent)、[04 最小 Chat](/guide/04-chat-llm) | 迷你 agent + Zen 免费对话；`bun run chat`；`scripts/bun.sh` → Bun 1.4.x |
 | `stage-02-tools` | 已发布 | [05 工具 read](/guide/05-tool-read) | `read` 真执行 + agent 循环；`bun run chat` 出现 `[tool]` |
-| `stage-03-…` | 计划中 | 待定 | 权限 / 更多 tool 等 |
+| `stage-03-write` | 已发布 | [06 工具 write](/guide/06-tool-write)、[07 权限](/guide/07-permissions)、[04 Chat](/guide/04-chat-llm) | `write` + FileAccess；本地 `:8787` / `models`；permissions（ask once/always/reject） |
+| `stage-04-shell` | 计划中 | （待写） | 受控 `shell`（超时 / cwd / 基础限制） |
+| `stage-05-permissions` | 已并入 `stage-03-write` | [07 权限](/guide/07-permissions) | 本阶段提前完成，见 `stage-03-write` |
+| `stage-06-session` | 计划中 | （待写） | messages 落盘；`chat --continue` |
+| `stage-07-…` | 计划中 | 选做 | grep/glob、多 agent、轻量 TUI 等 |
 
 > **状态说明**：「计划中」= 名字未定或尚未打 tag；「已发布」= 仓库里已有该 tag，可 checkout。
 

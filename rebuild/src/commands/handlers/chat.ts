@@ -1,22 +1,23 @@
 /**
- * Chat with a real model + optional tool loop (read).
+ * Chat with a real model + tool loop + permissions.
  *
- * Inspired by (upstream / local example relative paths):
- * - packages/core/src/aisdk.ts
- * - packages/core/src/agent.ts
- * - packages/core/src/tool/plugin/read.ts
- * - packages/sdk/js/example/chat-zen-free.mjs
+ * Important: do NOT keep readline open while tools/permissions run — a second
+ * readline on the same stdin deadlocks (looks like the agent "froze").
+ * OpenCode avoids this via TUI/Bus; we close the REPL prompt for each turn.
  */
 
 import * as readline from "node:readline/promises"
 import { stdin as input, stdout as output } from "node:process"
 import { resolve } from "../../agent/registry"
 import { loadLlmConfig } from "../../llm/config"
-import { chatCompletion } from "../../llm/openai-compatible"
 import type { ChatMessage } from "../../llm/messages"
 import { agentLoop } from "../../llm/agent-loop"
+import { evaluate, merge } from "../../permission/evaluate"
+import { loadPermissionOverlay } from "../../permission/load"
+import { createTtyAskHandler } from "../../permission/ask-tty"
+import type { PermissionRuntime } from "../../permission/assert"
+import { status } from "../../cli/tty"
 
-/** Status lines — cyan on stdout (stderr often renders red and looks like failure). */
 const dim = (s: string) => `\x1b[36m${s}\x1b[0m`
 function info(line: string) {
   console.log(dim(line))
@@ -24,6 +25,11 @@ function info(line: string) {
 
 function parseArgs(args: string[]) {
   let agentId: string | undefined
+  let model: string | undefined
+  let provider: string | undefined
+  let noStream = false
+  let askExternal = false
+  let allowExternal = false
   const positional: string[] = []
   for (let i = 0; i < args.length; i++) {
     const a = args[i]
@@ -31,13 +37,42 @@ function parseArgs(args: string[]) {
       agentId = args[++i]
       continue
     }
+    if (a === "--model" || a === "-m") {
+      model = args[++i]
+      continue
+    }
+    if (a === "--provider") {
+      provider = args[++i]
+      continue
+    }
+    if (a === "--no-stream") {
+      noStream = true
+      continue
+    }
+    if (a === "--ask-external") {
+      askExternal = true
+      continue
+    }
+    if (a === "--allow-external") {
+      allowExternal = true
+      continue
+    }
     positional.push(a)
   }
-  return { agentId, prompt: positional.join(" ").trim() }
+  return {
+    agentId,
+    model,
+    provider,
+    noStream,
+    askExternal,
+    allowExternal,
+    prompt: positional.join(" ").trim(),
+  }
 }
 
 export async function run(args: string[]) {
-  const { agentId, prompt } = parseArgs(args)
+  const { agentId, model, provider, noStream, askExternal, allowExternal, prompt } =
+    parseArgs(args)
   const agent = resolve(agentId)
   if (!agent) {
     console.error(agentId ? `agent not found: ${agentId}` : "no default agent")
@@ -46,86 +81,94 @@ export async function run(args: string[]) {
 
   let llm
   try {
-    llm = loadLlmConfig()
+    llm = await loadLlmConfig({ model, provider })
   } catch (err) {
     console.error(err instanceof Error ? err.message : err)
     process.exit(1)
   }
+
+  const overlay = await loadPermissionOverlay({ askExternal, allowExternal })
+  const unattended =
+    process.env.REBUILD_PERMISSION_UNATTENDED === "allow" ? "allow" : "deny"
+  const permission: PermissionRuntime = {
+    rules: merge(agent.permissions, overlay),
+    saved: [],
+    ask: createTtyAskHandler(unattended),
+    unattended,
+  }
+
+  const externalPolicy = evaluate(
+    "external_directory",
+    "*",
+    permission.rules,
+    permission.saved,
+  ).effect
 
   const messages: ChatMessage[] = []
   if (agent.system) {
     messages.push({ role: "system", content: agent.system })
   }
 
-  info(`provider=${llm.provider}  agent=${agent.id}  model=${llm.model}  base=${llm.baseURL}`)
-  if (llm.provider === "zen") {
-    info("auth=Bearer public (Zen free — no personal API key)")
-    info("tools=read (cwd-scoped)")
-  }
-  info("type /exit to quit")
+  info(`${agent.id} · ${llm.model} · ${llm.provider}`)
+  info(`tools read, write · permissions external=${externalPolicy}`)
+  info("/exit to quit")
   console.log()
 
-  const askOnce = async (userText: string) => {
+  const runTurn = async (userText: string) => {
     messages.push({ role: "user", content: userText })
+    process.stdout.write(dim("assistant> "))
     try {
-      if (llm.provider === "zen") {
-        await agentLoop({
-          baseURL: llm.baseURL,
-          model: llm.model,
-          version: llm.version,
-          messages,
-          cwd: process.cwd(),
-          onDelta: (d) => process.stdout.write(d),
-          onTool: (name, args, result) => {
-            info(`[tool] ${name}(${args})`)
-            const preview = result.slice(0, 160).replace(/\n/g, " ")
-            info(`[tool] → ${preview}${result.length > 160 ? "…" : ""}`)
-          },
-        })
-        console.log()
-      } else {
-        const reply = await chatCompletion({
-          baseURL: llm.baseURL,
-          apiKey: llm.apiKey!,
-          model: llm.model,
-          messages: messages.filter(
-            (m): m is { role: "system" | "user" | "assistant"; content: string } =>
-              (m.role === "system" || m.role === "user" || m.role === "assistant") &&
-              typeof m.content === "string",
-          ),
-        })
-        messages.push({ role: "assistant", content: reply })
-        console.log(reply)
-        console.log()
-      }
+      await agentLoop({
+        llm,
+        messages,
+        cwd: process.cwd(),
+        stream: !noStream,
+        permission,
+        onStatus: (line) => status(line),
+        onDelta: (d) => process.stdout.write(d),
+        onToolStart: (name, toolArgs) => {
+          console.log()
+          info(`[tool] ${name}(${toolArgs})`)
+        },
+        onTool: (_name, _toolArgs, result) => {
+          const preview = result.slice(0, 160).replace(/\n/g, " ")
+          info(`[tool] → ${preview}${result.length > 160 ? "…" : ""}`)
+        },
+      })
+      console.log()
     } catch (err) {
-      // keep user message; drop incomplete assistant/tool turns is hard — pop user on hard fail
       messages.pop()
       const msg = err instanceof Error ? err.message : String(err)
       console.error("\nError:", msg)
       if (/429|FreeUsageLimit|limit reached/i.test(msg)) {
         console.error(
-          "→ Zen free gate: use Bun≥1.4, stream:true, read tool, ses_ id, <env> block, User-Agent opencode/…",
+          "→ Free limit / Zen gate. Prefer local gateway:\n" +
+            "  REBUILD_LLM_PROVIDER=local bun run chat",
         )
+      }
+      if (/ECONNREFUSED|fetch failed/i.test(msg)) {
+        console.error("→ Start local gateway first (zen-free-agent --api-only on :8787)")
       }
     }
   }
 
   if (prompt) {
-    await askOnce(prompt)
+    await runTurn(prompt)
     return
   }
 
-  const rl = readline.createInterface({ input, output })
-  try {
-    while (true) {
-      const line = (await rl.question("you> ")).trim()
-      if (!line) continue
-      if (line === "/exit" || line === "/quit") break
-      process.stdout.write(dim("assistant> "))
-      await askOnce(line)
+  // REPL: create readline ONLY while waiting for you>; close before each turn
+  // so permission> can own stdin (otherwise the session appears frozen).
+  while (true) {
+    const rl = readline.createInterface({ input, output })
+    let line: string
+    try {
+      line = (await rl.question("you> ")).trim()
+    } finally {
+      rl.close()
     }
-  } finally {
-    rl.close()
+    if (!line) continue
+    if (line === "/exit" || line === "/quit") break
+    await runTurn(line)
   }
 }

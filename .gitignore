@@ -17,6 +17,9 @@ node_modules/
 notes/node_modules/
 rebuild/node_modules/
 rebuild/.env
+rebuild/.rebuild-llm.json
+rebuild/.rebuild-permissions.json
 .env
+rebuild/fixtures/out-*.txt
 *.log
 .DS_Store

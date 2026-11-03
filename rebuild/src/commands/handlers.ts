@@ -18,6 +18,7 @@ export const handlers: Record<string, () => Promise<HandlerModule>> = {
   hello: () => import("./handlers/hello"),
   agent: () => import("./handlers/agent"),
   chat: () => import("./handlers/chat"),
+  models: () => import("./handlers/models"),
 }
 
 export function listCommands() {

@@ -29,7 +29,7 @@ user
 | 路径 | 作用 |
 |------|------|
 | `rebuild/src/tool/defs.ts` | 发给模型的 tools 列表 |
-| `rebuild/src/tool/read.ts` | 只读 **cwd 内** 文本文件 |
+| `rebuild/src/tool/read.ts` | 读文本文件（相对 cwd 或绝对/external） |
 | `rebuild/src/tool/run.ts` | 按名字分发 |
 | `rebuild/src/llm/zen-free.ts` | 流式解析 `delta.tool_calls` |
 | `rebuild/src/llm/agent-loop.ts` | complete → tool → complete |
@@ -65,8 +65,10 @@ you> 读一下 fixtures/hello.txt，摘要一句
 | 已有 | 尚未做 |
 |------|--------|
 | `read` 真执行 + 多步循环 | `write` / `bash` / grep 等 |
-| cwd 路径沙箱 | 完整 permissions / FileAccess |
+| 路径 resolve（internal/external） | 完整 permissions / FileAccess |
 | 流式 tool_calls 拼装 | 图片 / PDF / 分页 |
+
+下一步：[06 工具 write](/guide/06-tool-write)。
 
 ## 验收清单
 
