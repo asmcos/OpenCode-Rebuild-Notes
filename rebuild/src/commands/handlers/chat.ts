@@ -110,7 +110,8 @@ export async function run(args: string[]) {
   }
 
   info(`${agent.id} · ${llm.model} · ${llm.provider}`)
-  info(`tools read, write · permissions external=${externalPolicy}`)
+  const shellPolicy = evaluate("shell", "*", permission.rules, permission.saved).effect
+  info(`tools read, write, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
   info("/exit to quit")
   console.log()
 

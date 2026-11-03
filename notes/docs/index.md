@@ -28,11 +28,21 @@
 | [04 最小 Chat](/guide/04-chat-llm) | 默认本地网关 `:8787` 对话 + `models` 选模型（无个人 Key） |
 | [05 工具 read](/guide/05-tool-read) | 模型可 tool_call → 本地读文件 → 再回答 |
 | [06 工具 write](/guide/06-tool-write) | 写文件（对齐 FileAccess；绝对路径可写） |
-| [07 权限](/guide/07-permissions) | allow/ask/deny；`--ask-external` 试 `/tmp` |
+| [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
+| [08 工具 shell](/guide/08-tool-shell) | 受控 shell（prepare → ask → 超时） |
+
+**已发布到 tag `stage-03-write`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
+
+| 计划阶段 | 你要得到什么 |
+|----------|----------------|
+| `stage-04-shell` | 受控 shell + permission ask（指南 08） |
+| `stage-06-session` | 对话落盘、`--continue` |
+| `stage-07-search` | grep / glob |
+| `stage-08-edit` | 局部 edit（非整文件 overwrite） |
+| `stage-09-agents` | explore 子 agent 真调度 |
+| `stage-10-…` | 选做：webfetch / todo / TUI / MCP… |
 
 每做完一步，文档里都会有「验收清单」。全部勾上再往下走。
-
-学习进度用 git tag 按阶段冻结（慢慢迭代，收口再打）。对照表见 [阶段与 Tag](/reference/tags)。
 
 ## 仓库里有什么
 

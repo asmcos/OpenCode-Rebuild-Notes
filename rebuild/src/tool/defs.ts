@@ -4,7 +4,10 @@
  * Inspired by (upstream relative paths):
  * - packages/core/src/tool/plugin/read.ts
  * - packages/core/src/tool/plugin/write.ts
+ * - packages/core/src/tool/plugin/shell.ts
  */
+
+import { shellToolDescription, DEFAULT_TIMEOUT_MS } from "./shell"
 
 export const READ_TOOL = {
   type: "function" as const,
@@ -51,4 +54,32 @@ export const WRITE_TOOL = {
   },
 }
 
-export const TOOLS = [READ_TOOL, WRITE_TOOL]
+export const SHELL_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "shell",
+    description: shellToolDescription(),
+    parameters: {
+      type: "object",
+      properties: {
+        command: {
+          type: "string",
+          description: "Shell command string to execute",
+        },
+        workdir: {
+          type: "string",
+          description:
+            "Working directory to execute the command in. Defaults to the current working directory. When possible, avoid changing directories in the command and set the working directory here instead.",
+        },
+        timeout: {
+          type: "number",
+          description: `Timeout in milliseconds. Set to 0 to disable the timeout. Defaults to ${DEFAULT_TIMEOUT_MS}.`,
+        },
+      },
+      required: ["command"],
+      additionalProperties: false,
+    },
+  },
+}
+
+export const TOOLS = [READ_TOOL, WRITE_TOOL, SHELL_TOOL]

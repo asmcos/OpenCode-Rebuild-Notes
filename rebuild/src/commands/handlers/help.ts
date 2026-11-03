@@ -17,7 +17,7 @@ Commands:
   models   List / select models from local OpenAI gateway
            models              # list (+ interactive pick)
            models use <id|n>   # save selection to .rebuild-llm.json
-  chat     Chat (default provider=local → http://127.0.0.1:8787/v1)
+  chat     Chat + tools read/write/shell (default provider=local :8787)
            chat [--agent <id>] [--model <id>] [--provider local|zen|openai]
                 [--no-stream] [--ask-external|--allow-external] [prompt]
            Default: external paths need permission (ask)

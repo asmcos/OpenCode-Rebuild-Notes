@@ -45,6 +45,8 @@ export const DEFAULT_PERMISSIONS: PermissionRuleset = [
   { action: "read", resource: "*.env.*", effect: "ask" },
   { action: "read", resource: "*.env.example", effect: "allow" },
   { action: "external_directory", resource: "*", effect: "ask" },
+  // Upstream often asks on shell via config; teaching default asks so the harness prompt shows.
+  { action: "shell", resource: "*", effect: "ask" },
 ]
 
 /** Exact upstream Agent.Info.default (no external ask). */
@@ -63,12 +65,15 @@ export const EXPLORE_PERMISSIONS: PermissionRuleset = [
   { action: "read", resource: "*.env.*", effect: "ask" },
   { action: "read", resource: "*.env.example", effect: "allow" },
   { action: "external_directory", resource: "*", effect: "allow" },
+  // Upstream explore allows shell — see packages/core/src/plugin/agent.ts
+  { action: "shell", resource: "*", effect: "allow" },
 ]
 
-/** Plan-like: no edits. */
+/** Plan-like: no edits / no shell. */
 export const PLAN_PERMISSIONS: PermissionRuleset = [
   { action: "*", resource: "*", effect: "allow" },
   { action: "edit", resource: "*", effect: "deny" },
+  { action: "shell", resource: "*", effect: "deny" },
   { action: "read", resource: "*.env", effect: "ask" },
   { action: "read", resource: "*.env.*", effect: "ask" },
   { action: "read", resource: "*.env.example", effect: "allow" },

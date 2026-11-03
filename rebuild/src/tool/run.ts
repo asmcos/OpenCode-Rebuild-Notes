@@ -7,6 +7,7 @@
 
 import { readFileTool } from "./read"
 import { writeFileTool } from "./write"
+import { shellTool } from "./shell"
 import type { PermissionRuntime } from "../permission/assert"
 
 export type ToolRunContext = {
@@ -19,9 +20,7 @@ export async function runTool(
   argsJson: string,
   ctx: ToolRunContext | string = process.cwd(),
 ): Promise<string> {
-  // back-compat: runTool(name, args, cwdString)
-  const context: ToolRunContext =
-    typeof ctx === "string" ? { cwd: ctx } : ctx
+  const context: ToolRunContext = typeof ctx === "string" ? { cwd: ctx } : ctx
   const cwd = context.cwd ?? process.cwd()
 
   let args: Record<string, unknown> = {}
@@ -47,6 +46,18 @@ export async function runTool(
       {
         path: typeof args.path === "string" ? args.path : undefined,
         content: typeof args.content === "string" ? args.content : undefined,
+      },
+      cwd,
+      context.permission,
+    )
+  }
+
+  if (name === "shell") {
+    return shellTool(
+      {
+        command: typeof args.command === "string" ? args.command : undefined,
+        workdir: typeof args.workdir === "string" ? args.workdir : undefined,
+        timeout: typeof args.timeout === "number" ? args.timeout : undefined,
       },
       cwd,
       context.permission,
