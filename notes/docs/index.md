@@ -1,6 +1,47 @@
-# OpenCode 复刻笔记
+<div class="oc-hero">
+  <span class="oc-hero-kicker">stage-06-search</span>
+  <h1>从零搭一个会找代码的 agent</h1>
+  <p>对照 OpenCode 的源码，一边读一边做一个迷你实现：能对话、能搜索、能读写文件、能在问过你之后跑命令。每一步都有文档，也有可以 checkout 的 tag。</p>
+  <div class="oc-actions">
+    <a class="primary" href="#怎么开始">先看路径</a>
+    <a class="ghost" href="./guide/09-menu">打开启动菜单这一课</a>
+  </div>
+</div>
 
-克隆仓库后，先进 `rebuild/` 执行 `bun run chat`。菜单里选 **Zen 免费模型**，不用个人 API Key 就能让它读文件、写文件、搜索代码、跑命令。讲解从下面的顺序走；当前代码对应 tag **`stage-06-search`**。
+<div class="oc-learn">
+  <p class="oc-learn-title">你会做到</p>
+  <ul>
+    <li>用菜单换 Zen 免费、Go 和本地模型</li>
+    <li>让模型先搜索，再读文件、写文件</li>
+    <li>shell 和仓库外写入会先问你</li>
+    <li>每一课都能指回上游源码的相对路径</li>
+  </ul>
+</div>
+
+<Ink name="handoff" />
+
+## 怎么开始
+
+按卡片走。不要跳课：前面的环境、源码地图和第一个 CLI，是后面 agent 的地基。
+
+<Grid>
+  <Card href="/baseline" no="基线" title="锁定对照的 commit">知道我们读的是 OpenCode 2.2.0 的哪一次提交。</Card>
+  <Card href="/guide/00-env" no="00" title="环境">装好 Bun 1.4.4，笔记仓库和上游源码并排放。</Card>
+  <Card href="/guide/01-read-source" no="01" title="读仓库">包怎么分、入口在哪、依赖往哪流。</Card>
+  <Card href="/guide/02-hello-bun" no="02" title="第一个程序">在 rebuild/ 里跑通 help、version、hello。</Card>
+  <Card href="/guide/03-what-is-agent" no="03" title="Agent 是什么">一份角色配置：提示、模式、权限。不是整个程序。</Card>
+  <Card href="/guide/04-chat-llm" no="04" title="接上模型">真实对话。后来的菜单课负责换 Zen / Go。</Card>
+  <Card href="/guide/05-tool-read" no="05" title="工具循环">模型发出 read，本地执行，再把内容喂回去。</Card>
+  <Card href="/guide/06-tool-write" no="06" title="写文件">整文件写入。仓库外的路径要先得到允许。</Card>
+  <Card href="/guide/07-permissions" no="07" title="权限">allow / ask / deny。询问发生在 harness，不发生在模型嘴里。</Card>
+  <Card href="/guide/08-tool-shell" no="08" title="受控 shell">先 prepare，再询问，再执行。没有后台任务。</Card>
+  <Card href="/guide/09-menu" no="09" title="启动菜单">tag stage-05-menu。用菜单切换 Zen、Go、本地和 agent。</Card>
+  <Card href="/guide/10-search" no="10" title="grep / glob">tag stage-06-search。先找到文件，再去读。</Card>
+</Grid>
+
+<p class="oc-note">还没做：会话落盘（stage-07）、局部 edit（stage-08）、真正派出 explore（stage-09）。每课末尾有验收清单，勾完再往下。</p>
+
+<Picture name="endpoints" />
 
 ## 为什么做这个项目
 
@@ -10,43 +51,13 @@
 
 ## 我们怎么学
 
-这份文档记录如何**从零理解并复刻** OpenCode。目标不是一天抄完整个代码，而是：
+三件事同时发生，所以笔记不会变成一份只可远观的源码说明书。
 
-1. **能跑起来**：环境、工具、最小程序每一步都能亲自验证
-2. **能对上号**：每一段复刻代码都能指回上游源码的**相对路径**
-3. **能出文档站**：用 VitePress 写 Markdown，`bun run build` 生成静态 HTML
-
-## 怎么用这份文档
-
-按顺序做，不要跳：
-
-| 步骤 | 你要得到什么 |
-|------|----------------|
-| [基线锁定](/baseline) | 知道我们对照的是哪一天、哪个 commit、哪个版本 |
-| [00 环境准备](/guide/00-env) | 本机装好 bun、git、VitePress，目录摆好 |
-| [01 读懂源码仓库](/guide/01-read-source) | 知道上游有哪些包、入口在哪、依赖怎么流 |
-| [02 第一个 bun 程序](/guide/02-hello-bun) | 在 `rebuild/` 里跑通最小 CLI |
-| [03 认识 Agent](/guide/03-what-is-agent) | 弄清 Agent 是「角色配置」，能 list/get 迷你 agent |
-| [04 最小 Chat](/guide/04-chat-llm) | 真实对话；`stage-05-menu` 用菜单切换 Zen 免费 / Go / 本地 |
-| [05 工具 read](/guide/05-tool-read) | 模型可 tool_call → 本地读文件 → 再回答 |
-| [06 工具 write](/guide/06-tool-write) | 写文件（对齐 FileAccess；绝对路径可写） |
-| [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
-| [08 工具 shell](/guide/08-tool-shell) | 受控 shell（prepare → ask → 超时） |
-| [09 启动菜单](/guide/09-menu) | tag `stage-05-menu`：菜单切换 Zen 免费 / Go / 本地 / agent |
-| [10 grep / glob](/guide/10-search) | tag `stage-06-search`：按内容和路径找文件 |
-
-**已发布到 tag `stage-06-search`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
-
-| 计划阶段 | 你要得到什么 |
-|----------|----------------|
-| `stage-07-session` | 对话落盘、`--continue` |
-| `stage-08-edit` | 局部 edit（非整文件 overwrite） |
-| `stage-09-agents` | explore 子 agent 真调度 |
-| `stage-10-…` | 选做：webfetch / todo / TUI / MCP… |
-
-每做完一步，文档里都会有「验收清单」。全部勾上再往下走。
+<Picture name="rhythm" />
 
 ## 仓库里有什么
+
+<Picture name="repos" />
 
 ```text
 OpenCode-Rebuild-Notes/

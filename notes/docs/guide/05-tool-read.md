@@ -6,13 +6,9 @@
 
 ## 5.1 心智模型
 
-```text
-user
-  → model（可能返回 tool_calls）
-  → 本地执行 read(path)
-  → role=tool 把结果塞回 messages
-  → model 再答（可多轮）
-```
+模型可以自己决定「先看文件」。看完之后，结果回到同一条对话里，它再回答你。
+
+<Figure name="read" />
 
 上游对照（浏览即可）：
 

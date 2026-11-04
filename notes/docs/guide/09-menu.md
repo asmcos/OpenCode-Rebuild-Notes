@@ -23,6 +23,10 @@
 
 ## 9.2 你会看到什么
 
+启动时先停在菜单。选模型之后才进入 `you>`。对话中途输入 `/menu` 可以再打开一次。
+
+<Figure name="menu" />
+
 ```bash
 cd ~/dev/OpenCode-Rebuild-Notes/rebuild
 bun run chat

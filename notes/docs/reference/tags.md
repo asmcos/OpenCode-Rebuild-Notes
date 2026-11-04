@@ -38,6 +38,7 @@ git checkout main
 | `stage-04-shell` | 已发布 | [08 工具 shell](/guide/08-tool-shell) | 受控 `shell` + permission `ask`；无 background |
 | `stage-05-menu` | 已发布 | [09 启动菜单](/guide/09-menu) | 启动菜单切换 Zen / Go / 本地；只列 free 模型 |
 | `stage-06-search` | 已发布 | [10 grep / glob](/guide/10-search) | `grep` + `glob`；默认 cwd；结果截断 |
+| `notes-illustrations` | 文档快照 | [首页](/) | 白底笔记上的第一张线稿。不是新的 agent 阶段，`stage-07` 仍留给会话落盘 |
 | `stage-06-session` | 改为 `stage-07-session` | — | 06 留给搜索，勿再打这个名字 |
 | `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
 | `stage-07-session` | 计划中 | 11（待写） | messages 落盘；`chat --continue` |

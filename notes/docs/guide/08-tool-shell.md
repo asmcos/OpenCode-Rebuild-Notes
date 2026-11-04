@@ -15,6 +15,10 @@
 
 `prepare` 顺序（必须同构）：
 
+<Figure name="shell" />
+
+文字版同一顺序：
+
 1. `FileAccess.resolve` workdir（directory）  
 2. `authorizeExternal`（workdir 与解析出的目录）  
 3. `permission.assert({ action: "shell", resources, save })`  

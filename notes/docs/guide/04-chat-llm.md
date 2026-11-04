@@ -12,6 +12,8 @@
 
 Zen 直连经常 429。推荐先起 **zen-free-agent** 本地 API（上游克隆里），再让 rebuild 当客户端：
 
+<Picture name="gateway" />
+
 ```bash
 # 终端 1（在 opencode 仓库）
 ~/.bun/bin/bun zen-free-agent/index.mjs --api-only

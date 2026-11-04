@@ -1,0 +1,389 @@
+:root {
+  /* 暖陶土 Terracotta */
+  --vp-c-brand-1: #b4531f;
+  --vp-c-brand-2: #c4602a;
+  --vp-c-brand-3: #d8723c;
+  --vp-c-brand-soft: rgba(180, 83, 31, 0.12);
+  /* 暖墨色 */
+  --oc-ink: #3a322b;
+  --oc-ink-soft: #8a7d6f;
+}
+
+.dark {
+  --vp-c-brand-1: #eda97e;
+  --vp-c-brand-2: #de8d5c;
+  --vp-c-brand-3: #c9773f;
+  --vp-c-brand-soft: rgba(237, 169, 126, 0.16);
+  --oc-ink: #ede4da;
+  --oc-ink-soft: #b3a898;
+}
+
+.oc-hero {
+  margin: 0.2rem 0 0.4rem;
+}
+
+.oc-hero-kicker {
+  display: block;
+  margin-bottom: 0.7rem;
+  color: var(--vp-c-brand-1);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.oc-hero h1 {
+  margin: 0 0 0.75rem;
+  border: none;
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.oc-hero p {
+  max-width: 40rem;
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.oc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.15rem;
+}
+
+.oc-actions a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.oc-actions a.primary {
+  background: var(--vp-c-brand-1);
+  color: #fff;
+}
+
+.oc-actions a.primary:hover {
+  background: var(--vp-c-brand-2);
+}
+
+.dark .oc-actions a.primary {
+  background: var(--vp-c-brand-1);
+  color: #2b1608;
+}
+
+.dark .oc-actions a.primary:hover {
+  background: var(--vp-c-brand-2);
+}
+
+.oc-actions a.ghost {
+  border: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+}
+
+.oc-learn {
+  margin: 1.35rem 0 1.5rem;
+  padding: 1.05rem 1.2rem 0.35rem;
+  border-radius: 12px;
+  background: #faf4ec;
+}
+
+.dark .oc-learn {
+  background: var(--vp-c-bg-soft);
+}
+
+.oc-learn-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.oc-learn ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.oc-learn li {
+  margin: 0.28rem 0;
+}
+
+.oc-ink {
+  margin: 1.6rem auto 1.4rem;
+}
+
+.oc-ink svg {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  margin: 0 auto;
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+.oc-ink .p-up {
+  fill: #faece7;
+  stroke: #d85a30;
+  stroke-width: 1.25;
+}
+
+.dark .oc-ink .p-up {
+  fill: #331f16;
+  stroke: #d8723c;
+}
+
+.oc-ink .p-mine {
+  fill: #faeeda;
+  stroke: #ba7517;
+  stroke-width: 1.25;
+}
+
+.dark .oc-ink .p-mine {
+  fill: #2e2413;
+  stroke: #d19a45;
+}
+
+.oc-ink .p-doc {
+  fill: #f1efe8;
+  stroke: #6b6558;
+  stroke-width: 1.25;
+}
+
+.dark .oc-ink .p-doc {
+  fill: #26221c;
+  stroke: #9c947f;
+}
+
+.oc-ink .p-page {
+  fill: #fffdf9;
+  stroke: #d85a30;
+  stroke-width: 1.25;
+}
+
+.dark .oc-ink .p-page {
+  fill: #241e18;
+  stroke: #d8723c;
+}
+
+.oc-ink .p-pill {
+  fill: #f5c4b3;
+}
+
+.oc-ink .pill-text {
+  fill: #712b13;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dark .oc-ink .pill-text {
+  fill: #f3cdb8;
+}
+
+.oc-ink .t-title {
+  fill: var(--oc-ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.oc-ink .t-sub {
+  fill: var(--oc-ink-soft);
+  font-size: 12px;
+}
+
+.oc-ink .t-mono {
+  fill: var(--oc-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+.oc-ink .i-line {
+  fill: none;
+  stroke: var(--vp-c-brand-2);
+  stroke-width: 1.4;
+}
+
+.oc-ink .i-hair {
+  fill: none;
+  stroke: var(--oc-ink);
+  stroke-width: 1;
+  opacity: 0.3;
+}
+
+.oc-ink figcaption {
+  margin-top: 0.35rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.oc-fig {
+  margin: 1.15rem 0 1.5rem;
+}
+
+.oc-fig-scroll {
+  overflow-x: auto;
+}
+
+.oc-fig svg {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  height: auto;
+  color: var(--oc-ink);
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+.dark .oc-fig svg {
+  color: var(--oc-ink);
+}
+
+.oc-fig .box {
+  fill: #fffdf9;
+  stroke: currentColor;
+  stroke-width: 1.25;
+}
+
+.dark .oc-fig .box {
+  fill: #241e18;
+}
+
+.oc-fig .line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+}
+
+.oc-fig .life {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0.55;
+}
+
+.oc-fig .back {
+  stroke-dasharray: 5 4;
+}
+
+.oc-fig .head {
+  fill: currentColor;
+}
+
+.oc-fig .label {
+  fill: currentColor;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.oc-fig .idx,
+.oc-fig .note,
+.oc-fig .sub {
+  fill: var(--oc-ink-soft);
+  font-size: 13px;
+}
+
+.dark .oc-fig .idx,
+.dark .oc-fig .note,
+.dark .oc-fig .sub {
+  fill: var(--oc-ink-soft);
+}
+
+.oc-fig .idx {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.oc-fig .sheet {
+  fill: #f8f1e7;
+  stroke: currentColor;
+  stroke-width: 1.35;
+}
+
+.dark .oc-fig .sheet {
+  fill: #2a231c;
+}
+
+.oc-fig .hair {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.35;
+}
+
+.oc-fig .mono {
+  fill: currentColor;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+}
+
+.oc-fig .glass {
+  fill: #fffdf9;
+  stroke: var(--vp-c-brand-2);
+  stroke-width: 1.6;
+}
+
+.dark .oc-fig .glass {
+  fill: #241e18;
+  stroke: var(--vp-c-brand-2);
+}
+
+.oc-fig figcaption {
+  margin-top: 0.4rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.84rem;
+}
+
+.oc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 1.4rem;
+}
+
+.oc-card {
+  display: block;
+  min-width: 0;
+  padding: 0.8rem 0.85rem 0.75rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: inherit;
+  text-decoration: none;
+}
+
+.oc-card:hover {
+  border-color: var(--vp-c-brand-2);
+}
+
+.oc-card-no {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--vp-c-text-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.oc-card strong {
+  display: block;
+  color: var(--vp-c-text-1);
+  font-size: 0.98rem;
+}
+
+.oc-card p {
+  margin: 0.3rem 0 0;
+  color: var(--vp-c-text-2);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.oc-note {
+  margin: 0.2rem 0 1.2rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.92rem;
+}
