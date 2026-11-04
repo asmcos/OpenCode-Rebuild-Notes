@@ -76,4 +76,4 @@ console.log(await shellTool({ command: "sleep 2", timeout: 200 }, process.cwd(),
 - [ ] 超时命令返回 timeout 说明  
 - [ ] 清楚：本阶段没有 background  
 
-下一步：[阶段与 Tag](/reference/tags) 里的 `stage-06-session`。
+下一步：[09 启动菜单](/guide/09-menu)（tag `stage-05-menu`）。

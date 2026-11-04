@@ -32,6 +32,7 @@
 | [06 工具 write](/guide/06-tool-write) | 写文件（对齐 FileAccess；绝对路径可写） |
 | [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
 | [08 工具 shell](/guide/08-tool-shell) | 受控 shell（prepare → ask → 超时） |
+| [09 启动菜单](/guide/09-menu) | tag `stage-05-menu`：菜单切换 Zen 免费 / Go / 本地 / agent |
 
 **已发布到 tag `stage-05-menu`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
 

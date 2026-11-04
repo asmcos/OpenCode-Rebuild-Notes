@@ -101,37 +101,16 @@ bun run chat
 | agent.system 差异 | permissions、TUI、持久 Session |
 | Zen 免费与 Go 互切，`models` 只列 free | 完整 provider catalog、付费模型 |
 
-## 4.6 Zen 免费与 Go 互切
+## 4.6 启动菜单
 
-对应 tag：`stage-05-menu`。`bun run chat` 的启动菜单用来切换 Zen 免费、Go 和本地网关。目录只列出 free（`*contributor*` 不出现），并记住每一侧上次的模型。
+Zen / Go / 本地的切换菜单是单独一课，对应 tag `stage-05-menu`：[09 启动菜单](/guide/09-menu)。
 
-```bash
-cd ~/dev/OpenCode-Rebuild-Notes/rebuild
-
-bun run models zen                 # 切到 Zen，列出免费模型
-bun run models go                  # 切到 Go
-bun run models use 2               # 当前这一侧选第 2 个
-bun run models use go beam-free    # 切到 Go 并选模型
-bun run models local               # 回到 :8787
-
-bun run chat                       # 用刚才保存的端点 + 模型
-```
-
-Go 需要 key，而且**不要写进 git**：
+本章仍保留命令行选法，方便不进菜单时使用：
 
 ```bash
-OPENCODE_API_KEY=oc_sk_… bun run models go
-# 或者记到 gitignore 的 rebuild/.rebuild-llm.json
-bun run models key set oc_sk_…
-bun run models key                 # 只打印掩码，不打印全文
+bun run models zen
+bun run models use go beam-free
 ```
-
-| 端点 | 鉴权 | Chat |
-|------|------|------|
-| `zen` | `Bearer public` | `https://opencode.ai/inference/openai/v1` |
-| `go` | `Bearer oc_sk_…` | `https://opencode.ai/inference/go/openai/v1` |
-
-非 free 的 id（例如不带 `-free`、也不是 Zen 的 `big-pickle` / `grok-code`）会被拒绝。
 
 ## 验收清单
 

@@ -36,12 +36,12 @@ git checkout main
 | `stage-02-tools` | 已发布 | [05 工具 read](/guide/05-tool-read) | `read` 真执行 + agent 循环；`bun run chat` 出现 `[tool]` |
 | `stage-03-write` | 已发布 | [06 write](/guide/06-tool-write)、[07 权限](/guide/07-permissions)、[04 Chat](/guide/04-chat-llm) | `write` + FileAccess；本地 `:8787` / `models`；permissions |
 | `stage-04-shell` | 已发布 | [08 工具 shell](/guide/08-tool-shell) | 受控 `shell` + permission `ask`；无 background |
-| `stage-05-menu` | 已发布 | [04 Chat](/guide/04-chat-llm) §4.6 | 启动菜单切换 Zen / Go / 本地；只列 free 模型 |
+| `stage-05-menu` | 已发布 | [09 启动菜单](/guide/09-menu) | 启动菜单切换 Zen / Go / 本地；只列 free 模型 |
 | `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
-| `stage-06-session` | 计划中 | 09（待写） | messages 落盘；`chat --continue` |
-| `stage-07-search` | 计划中 | 10（待写） | `grep` / `glob` 迷你工具 |
-| `stage-08-edit` | 计划中 | 11（待写） | `edit`（局部补丁，非整文件 overwrite） |
-| `stage-09-agents` | 计划中 | 12（待写） | 多 agent / subagent 调度（explore 真跑起来） |
+| `stage-06-session` | 计划中 | 10（待写） | messages 落盘；`chat --continue` |
+| `stage-07-search` | 计划中 | 11（待写） | `grep` / `glob` 迷你工具 |
+| `stage-08-edit` | 计划中 | 12（待写） | `edit`（局部补丁，非整文件 overwrite） |
+| `stage-09-agents` | 计划中 | 13（待写） | 多 agent / subagent 调度（explore 真跑起来） |
 | `stage-10-…` | 选做 | — | webfetch、todo、轻量 TUI、MCP 等 |
 
 > **状态说明**：「计划中」= 尚未打 tag；「已发布」= 仓库里已有该 tag；「已并入」= 内容落在别的 tag，编号保留以免读者迷路。
@@ -59,7 +59,7 @@ git checkout main
 | 对照 | 本地示例 `zen-free-agent` 的 Zen / Go 上游；交互选择相当于迷你 `/models` |
 | 迷你目标 | `bun run chat` 先出菜单，用菜单切换 Zen 免费 / Go / 本地，再进入 `you>`；对话中 `/menu` 可再换 |
 | 验收 | 选 Zen 免费模型序号后，头一行变成 `agent · model · zen` |
-| 文档 | 指南 **04** §4.6 |
+| 文档 | 指南 **[09 启动菜单](/guide/09-menu)** |
 
 ### `stage-04-shell`
 
@@ -81,7 +81,7 @@ git checkout main
 | 必做 | 新开 session 打印 id；列表 `sessions` 命令（可极简） |
 | 不做 | 多设备同步、compaction、完整 Bus 事件 |
 | 验收 | 退出后再 `--continue`，模型仍记得上一轮写过的文件名 |
-| 文档 | 指南 **09 Session** |
+| 文档 | 指南 **10 Session** |
 
 ### `stage-07-search`
 
@@ -92,7 +92,7 @@ git checkout main
 | 必做 | 默认搜 cwd；external 走已有 `external_directory` |
 | 不做 | ripgrep 全特性、UI 高亮 |
 | 验收 | 「找出所有含 `agentLoop` 的 ts 文件」→ tool 结果非空 |
-| 文档 | 指南 **10 grep/glob** |
+| 文档 | 指南 **11 grep/glob** |
 
 ### `stage-08-edit`
 
@@ -103,7 +103,7 @@ git checkout main
 | 必做 | 与 `write` 一样走 `edit` permission；唯一匹配才替换 |
 | 不做 | diff 预览 UI、undo 栈、formatter |
 | 验收 | 改 `fixtures/hello.txt` 一行，read 回来确认 |
-| 文档 | 指南 **11 edit** |
+| 文档 | 指南 **12 edit** |
 
 ### `stage-09-agents`
 
@@ -114,7 +114,7 @@ git checkout main
 | 必做 | explore 的 permissions 已 deny edit——真跑一轮验证 |
 | 不做 | 并行多子 agent、完整 job 系统 |
 | 验收 | 「让 explore 查一下 permission 目录有哪些文件」→ 有子 agent 轨迹 |
-| 文档 | 指南 **12 多 Agent** |
+| 文档 | 指南 **13 多 Agent** |
 
 ### 选做（`stage-10-…`）
 

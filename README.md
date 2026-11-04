@@ -54,7 +54,7 @@ bun run dev
 | `stage-02-tools` | 模型可以 `read` 文件 |
 | `stage-03-write` | `write`、本地网关、权限 |
 | `stage-04-shell` | 受控 `shell`，执行前询问 |
-| `stage-05-menu` | 菜单切换 Zen / Go / 本地模型 |
+| `stage-05-menu` | 菜单切换 Zen / Go / 本地模型。讲解：[09 启动菜单](notes/docs/guide/09-menu.md) |
 
 下一步还没做：会话落盘、搜索、局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。
 

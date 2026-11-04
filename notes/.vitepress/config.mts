@@ -93,6 +93,7 @@ export default defineConfig({
           { text: "06 工具 write", link: "/guide/06-tool-write" },
           { text: "07 权限 permissions", link: "/guide/07-permissions" },
           { text: "08 工具 shell", link: "/guide/08-tool-shell" },
+          { text: "09 启动菜单", link: "/guide/09-menu" },
         ],
       },
       {
@@ -124,6 +125,7 @@ export default defineConfig({
           { text: "06 工具 write", link: "/guide/06-tool-write" },
           { text: "07 权限 permissions", link: "/guide/07-permissions" },
           { text: "08 工具 shell", link: "/guide/08-tool-shell" },
+          { text: "09 启动菜单", link: "/guide/09-menu" },
         ],
       },
       {
