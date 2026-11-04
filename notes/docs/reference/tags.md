@@ -37,9 +37,11 @@ git checkout main
 | `stage-03-write` | 已发布 | [06 write](/guide/06-tool-write)、[07 权限](/guide/07-permissions)、[04 Chat](/guide/04-chat-llm) | `write` + FileAccess；本地 `:8787` / `models`；permissions |
 | `stage-04-shell` | 已发布 | [08 工具 shell](/guide/08-tool-shell) | 受控 `shell` + permission `ask`；无 background |
 | `stage-05-menu` | 已发布 | [09 启动菜单](/guide/09-menu) | 启动菜单切换 Zen / Go / 本地；只列 free 模型 |
+| `stage-06-search` | 已发布 | [10 grep / glob](/guide/10-search) | `grep` + `glob`；默认 cwd；结果截断 |
+| `stage-06-session` | 改为 `stage-07-session` | — | 06 留给搜索，勿再打这个名字 |
 | `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
-| `stage-06-session` | 计划中 | 10（待写） | messages 落盘；`chat --continue` |
-| `stage-07-search` | 计划中 | 11（待写） | `grep` / `glob` 迷你工具 |
+| `stage-07-session` | 计划中 | 11（待写） | messages 落盘；`chat --continue` |
+| `stage-07-search` | 已并入 `stage-06-search` | [10](/guide/10-search) | 提前做成 06，勿再单独打 tag |
 | `stage-08-edit` | 计划中 | 12（待写） | `edit`（局部补丁，非整文件 overwrite） |
 | `stage-09-agents` | 计划中 | 13（待写） | 多 agent / subagent 调度（explore 真跑起来） |
 | `stage-10-…` | 选做 | — | webfetch、todo、轻量 TUI、MCP 等 |
@@ -72,18 +74,7 @@ git checkout main
 | 验收 | `bun run chat`：「在仓库里跑 `ls`」→ 黄框 permission → `o` → 看到目录列表 |
 | 文档 | 指南 **08 工具 shell** |
 
-### `stage-06-session`（编号保留 06）
-
-| 项 | 内容 |
-|----|------|
-| 上游对照 | `packages/core/src/session/`（store / schema 概念） |
-| 迷你目标 | 把 `messages` 落到 `rebuild/.sessions/<id>.json`；`chat --continue [id]` 接着聊 |
-| 必做 | 新开 session 打印 id；列表 `sessions` 命令（可极简） |
-| 不做 | 多设备同步、compaction、完整 Bus 事件 |
-| 验收 | 退出后再 `--continue`，模型仍记得上一轮写过的文件名 |
-| 文档 | 指南 **10 Session** |
-
-### `stage-07-search`
+### `stage-06-search`
 
 | 项 | 内容 |
 |----|------|
@@ -92,7 +83,18 @@ git checkout main
 | 必做 | 默认搜 cwd；external 走已有 `external_directory` |
 | 不做 | ripgrep 全特性、UI 高亮 |
 | 验收 | 「找出所有含 `agentLoop` 的 ts 文件」→ tool 结果非空 |
-| 文档 | 指南 **11 grep/glob** |
+| 文档 | 指南 **[10 grep / glob](/guide/10-search)** |
+
+### `stage-07-session`（原计划叫 06，编号让给搜索）
+
+| 项 | 内容 |
+|----|------|
+| 上游对照 | `packages/core/src/session/`（store / schema 概念） |
+| 迷你目标 | 把 `messages` 落到 `rebuild/.sessions/<id>.json`；`chat --continue [id]` 接着聊 |
+| 必做 | 新开 session 打印 id；列表 `sessions` 命令（可极简） |
+| 不做 | 多设备同步、compaction、完整 Bus 事件 |
+| 验收 | 退出后再 `--continue`，模型仍记得上一轮写过的文件名 |
+| 文档 | 指南 **11 Session** |
 
 ### `stage-08-edit`
 
@@ -125,8 +127,8 @@ git checkout main
 ## 推荐学习顺序（时间线）
 
 ```text
-已发布:  00 → 01 → 02 → 03 → 04-shell → 05-menu
-接下来:  06-session → 07-search → 08-edit → 09-agents
+已发布:  00 → 01 → 02 → 03 → 04-shell → 05-menu → 06-search
+接下来:  07-session → 08-edit → 09-agents
 选做:    10+
 ```
 

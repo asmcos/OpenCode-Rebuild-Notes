@@ -61,6 +61,8 @@ export const UPSTREAM_DEFAULT_PERMISSIONS: PermissionRuleset = [
 export const EXPLORE_PERMISSIONS: PermissionRuleset = [
   { action: "*", resource: "*", effect: "deny" },
   { action: "read", resource: "*", effect: "allow" },
+  { action: "grep", resource: "*", effect: "allow" },
+  { action: "glob", resource: "*", effect: "allow" },
   { action: "read", resource: "*.env", effect: "ask" },
   { action: "read", resource: "*.env.*", effect: "ask" },
   { action: "read", resource: "*.env.example", effect: "allow" },

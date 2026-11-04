@@ -113,7 +113,7 @@ export async function run(args: string[]) {
     ).effect
     const shellPolicy = evaluate("shell", "*", permission.rules, permission.saved).effect
     info(`${agent.id} · ${llm.model} · ${llm.provider}`)
-    info(`tools read, write, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
+    info(`tools read, write, grep, glob, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
     if (!prompt) info("/menu 菜单 · /exit 退出")
     console.log()
   }

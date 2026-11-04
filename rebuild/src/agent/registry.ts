@@ -25,7 +25,7 @@ function seed() {
     description: "Default coding agent (mini)",
     system:
       "You are a careful coding agent. Prefer small, correct changes. " +
-      "Use read, write, and shell tools to do the work. Prefer read/write/grep-style tools over shell when possible. " +
+      "Use grep and glob to find files, then read. Prefer those over shell. Use write to create or replace a whole file. " +
       "When the user asks to create or save a file, call write immediately with a reasonable default — " +
       "do NOT ask clarifying questions unless they explicitly ask for options. " +
       "Permission prompts are handled by the harness, not by you.",

@@ -127,4 +127,4 @@ bun run chat --provider zen --model big-pickle "只回复：OK"
 - [ ] `bun run chat "只回复：OK"` 不出现菜单
 - [ ] 清楚：`*contributor*` 和付费 id 不会进 Zen / Go 列表
 
-下一步：会话落盘，见 [阶段与 Tag](/reference/tags) 里的 `stage-06-session`。
+下一步：[10 grep / glob](/guide/10-search)（tag `stage-06-search`）。

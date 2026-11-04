@@ -82,4 +82,48 @@ export const SHELL_TOOL = {
   },
 }
 
-export const TOOLS = [READ_TOOL, WRITE_TOOL, SHELL_TOOL]
+export const GREP_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "grep",
+    description:
+      "Search file contents for a regular expression or literal text. " +
+      "Use this to find code before reading files. Defaults to the working directory. " +
+      "Returns file paths, line numbers, and a short preview.",
+    parameters: {
+      type: "object",
+      properties: {
+        pattern: { type: "string", description: "Regular expression, or literal text when literal=true" },
+        path: { type: "string", description: "File or directory to search. Defaults to the working directory." },
+        include: { type: "string", description: 'Glob filter, for example "*.ts"' },
+        literal: { type: "boolean", description: "Treat pattern as exact text (default false)" },
+        caseSensitive: { type: "boolean", description: "Case-sensitive match (default true)" },
+        limit: { type: "number", description: "Max matching lines (default 100)" },
+      },
+      required: ["pattern"],
+      additionalProperties: false,
+    },
+  },
+}
+
+export const GLOB_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "glob",
+    description:
+      'Find files by path pattern (examples: "**/*.ts", "src/**/*.tsx"). Defaults to the working directory.',
+    parameters: {
+      type: "object",
+      properties: {
+        pattern: { type: "string", description: "Glob pattern" },
+        path: { type: "string", description: "Directory to search. Defaults to the working directory." },
+        hidden: { type: "boolean", description: "Include hidden files (default false)" },
+        limit: { type: "number", description: "Max matching files (default 100)" },
+      },
+      required: ["pattern"],
+      additionalProperties: false,
+    },
+  },
+}
+
+export const TOOLS = [READ_TOOL, WRITE_TOOL, SHELL_TOOL, GREP_TOOL, GLOB_TOOL]

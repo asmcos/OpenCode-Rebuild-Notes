@@ -2,7 +2,7 @@
 
 对照 [OpenCode](https://github.com/anomalyco/opencode) 的源码，从零搭一个能对话、读文件、改文件、跑命令的迷你 coding agent。每完成一块就有文档和 git tag，克隆下来就能跑，不必先读完上游。
 
-当前进度：**`stage-05-menu`**。启动 `chat` 后用菜单切换 **Zen 免费模型**、**OpenCode Go** 或本地网关，再让它干活。
+当前进度：**`stage-06-search`**。模型可以用 `grep` / `glob` 在仓库里找代码；`bun run chat` 的菜单仍然用来切换 **Zen 免费模型**、**OpenCode Go** 或本地网关。
 
 ## 三分钟试一次
 
@@ -55,6 +55,7 @@ bun run dev
 | `stage-03-write` | `write`、本地网关、权限 |
 | `stage-04-shell` | 受控 `shell`，执行前询问 |
 | `stage-05-menu` | 菜单切换 Zen / Go / 本地模型。讲解：[09 启动菜单](notes/docs/guide/09-menu.md) |
+| `stage-06-search` | `grep` / `glob` 找文件。讲解：[10 grep / glob](notes/docs/guide/10-search.md) |
 
 下一步还没做：会话落盘、搜索、局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。
 

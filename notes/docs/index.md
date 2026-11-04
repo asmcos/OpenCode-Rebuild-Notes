@@ -1,6 +1,6 @@
 # OpenCode 复刻笔记
 
-克隆仓库后，先进 `rebuild/` 执行 `bun run chat`。菜单里选 **Zen 免费模型**，不用个人 API Key 就能让它读文件、写文件、跑命令。讲解从下面的顺序走；当前代码对应 tag **`stage-05-menu`**。
+克隆仓库后，先进 `rebuild/` 执行 `bun run chat`。菜单里选 **Zen 免费模型**，不用个人 API Key 就能让它读文件、写文件、搜索代码、跑命令。讲解从下面的顺序走；当前代码对应 tag **`stage-06-search`**。
 
 ## 为什么做这个项目
 
@@ -33,13 +33,13 @@
 | [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
 | [08 工具 shell](/guide/08-tool-shell) | 受控 shell（prepare → ask → 超时） |
 | [09 启动菜单](/guide/09-menu) | tag `stage-05-menu`：菜单切换 Zen 免费 / Go / 本地 / agent |
+| [10 grep / glob](/guide/10-search) | tag `stage-06-search`：按内容和路径找文件 |
 
-**已发布到 tag `stage-05-menu`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
+**已发布到 tag `stage-06-search`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
 
 | 计划阶段 | 你要得到什么 |
 |----------|----------------|
-| `stage-06-session` | 对话落盘、`--continue` |
-| `stage-07-search` | grep / glob |
+| `stage-07-session` | 对话落盘、`--continue` |
 | `stage-08-edit` | 局部 edit（非整文件 overwrite） |
 | `stage-09-agents` | explore 子 agent 真调度 |
 | `stage-10-…` | 选做：webfetch / todo / TUI / MCP… |

@@ -8,6 +8,7 @@
 import { readFileTool } from "./read"
 import { writeFileTool } from "./write"
 import { shellTool } from "./shell"
+import { globTool, grepTool } from "./search"
 import type { PermissionRuntime } from "../permission/assert"
 
 export type ToolRunContext = {
@@ -46,6 +47,34 @@ export async function runTool(
       {
         path: typeof args.path === "string" ? args.path : undefined,
         content: typeof args.content === "string" ? args.content : undefined,
+      },
+      cwd,
+      context.permission,
+    )
+  }
+
+  if (name === "grep") {
+    return grepTool(
+      {
+        pattern: typeof args.pattern === "string" ? args.pattern : undefined,
+        path: typeof args.path === "string" ? args.path : undefined,
+        include: typeof args.include === "string" ? args.include : undefined,
+        literal: typeof args.literal === "boolean" ? args.literal : undefined,
+        caseSensitive: typeof args.caseSensitive === "boolean" ? args.caseSensitive : undefined,
+        limit: typeof args.limit === "number" ? args.limit : undefined,
+      },
+      cwd,
+      context.permission,
+    )
+  }
+
+  if (name === "glob") {
+    return globTool(
+      {
+        pattern: typeof args.pattern === "string" ? args.pattern : undefined,
+        path: typeof args.path === "string" ? args.path : undefined,
+        hidden: typeof args.hidden === "boolean" ? args.hidden : undefined,
+        limit: typeof args.limit === "number" ? args.limit : undefined,
       },
       cwd,
       context.permission,
