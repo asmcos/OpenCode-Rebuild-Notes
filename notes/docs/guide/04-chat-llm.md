@@ -103,7 +103,7 @@ bun run chat
 
 ## 4.6 Zen 免费与 Go 互切
 
-对应 tag：`stage-05-zen-go`。测试时要经常换模型：`models` 直接问上游，**只列出 free**（`*contributor*` 不出现），并记住每一侧上次的模型，来回切不会丢。
+对应 tag：`stage-05-menu`。`bun run chat` 的启动菜单用来切换 Zen 免费、Go 和本地网关。目录只列出 free（`*contributor*` 不出现），并记住每一侧上次的模型。
 
 ```bash
 cd ~/dev/OpenCode-Rebuild-Notes/rebuild

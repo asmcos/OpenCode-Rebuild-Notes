@@ -31,7 +31,7 @@
 | [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
 | [08 工具 shell](/guide/08-tool-shell) | 受控 shell（prepare → ask → 超时） |
 
-**已发布到 tag `stage-06-menu`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
+**已发布到 tag `stage-05-menu`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
 
 | 计划阶段 | 你要得到什么 |
 |----------|----------------|
