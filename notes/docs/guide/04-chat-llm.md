@@ -49,7 +49,7 @@ cd ~/dev/OpenCode-Rebuild-Notes/rebuild
 bun run models              # 列出 /v1/models，可交互选择
 bun run models use beam-free
 
-bun run chat                # 默认 provider=local
+bun run chat                # 先出菜单：Zen / Go / 本地模型 / agent
 bun run chat --model beam-free "只回复：OK"
 bun run chat --no-stream --agent build "你好"
 ```

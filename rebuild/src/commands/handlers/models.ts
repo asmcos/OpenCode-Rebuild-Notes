@@ -34,7 +34,7 @@ function isEndpoint(value: string | undefined): value is "zen" | "go" | "local" 
   return value === "zen" || value === "go" || value === "local"
 }
 
-async function rememberModel(provider: LlmProvider, model: string, baseURL?: string) {
+export async function rememberModel(provider: LlmProvider, model: string, baseURL?: string) {
   const patch: LlmPrefs = { provider, model }
   const unset: (keyof LlmPrefs)[] = []
   if (provider === "zen") {
@@ -49,7 +49,7 @@ async function rememberModel(provider: LlmProvider, model: string, baseURL?: str
   await savePrefs(patch, unset)
 }
 
-async function idsFor(llm: LlmConfig) {
+export async function listSelectableModels(llm: LlmConfig) {
   if (llm.provider === "zen" || llm.provider === "go") {
     return listFreeModels(llm.provider, llm.apiKey)
   }
@@ -94,6 +94,37 @@ async function promptPick(ids: string[]) {
   }
 }
 
+/** Switch Zen / Go / local and remember the other side's model. Error string, or null. */
+export async function activateEndpoint(endpoint: "zen" | "go" | "local"): Promise<string | null> {
+  if (endpoint === "go" && !resolveGoApiKey(await loadPrefs())) {
+    return (
+      "Go needs an API key (not stored in git).\n" +
+      "  OPENCODE_API_KEY=oc_sk_… bun run models go\n" +
+      "  or: bun run models key set oc_sk_…"
+    )
+  }
+
+  const prefs = await loadPrefs()
+  if (prefs.provider === "zen" && prefs.model) await savePrefs({ zenModel: prefs.model })
+  if (prefs.provider === "go" && prefs.model) await savePrefs({ goModel: prefs.model })
+
+  if (endpoint === "zen" || endpoint === "go") {
+    const fresh = await loadPrefs()
+    const remembered = endpoint === "go" ? fresh.goModel : fresh.zenModel
+    const fallback = endpoint === "go" ? FALLBACK_GO_MODEL : FALLBACK_ZEN_MODEL
+    const seed = remembered && isFreeModel(remembered, endpoint) ? remembered : fallback
+    await rememberModel(endpoint, seed)
+    return null
+  }
+
+  await savePrefs({
+    provider: "local",
+    model: prefs.provider === "local" ? prefs.model || "beam-free" : "beam-free",
+    baseURL: prefs.baseURL || "http://127.0.0.1:8787/v1",
+  })
+  return null
+}
+
 export async function run(args: string[]) {
   const json = args.includes("--json")
   const pos = args.filter((a) => !a.startsWith("--"))
@@ -132,7 +163,7 @@ export async function run(args: string[]) {
   } else if (isEndpoint(sub) && sub) {
     switchTo = sub
     useTokens = pos.slice(1)
-  } else   if (sub === "use") {
+  } else if (sub === "use") {
     if (isEndpoint(pos[1])) {
       switchTo = pos[1]
       useTokens = pos.slice(2)
@@ -145,33 +176,12 @@ export async function run(args: string[]) {
     }
   }
 
-  if (switchTo === "go" && !resolveGoApiKey(await loadPrefs())) {
-    console.error(
-      "Go needs an API key (not stored in git).\n" +
-        "  OPENCODE_API_KEY=oc_sk_… bun run models go\n" +
-        "  or: bun run models key set oc_sk_…",
-    )
-    process.exit(1)
-  }
-
-  if (switchTo === "zen" || switchTo === "go") {
-    const prefs = await loadPrefs()
-    const endpoint = switchTo
-    if (prefs.provider === "zen" && prefs.model) await savePrefs({ zenModel: prefs.model })
-    if (prefs.provider === "go" && prefs.model) await savePrefs({ goModel: prefs.model })
-    const remembered = endpoint === "go" ? (await loadPrefs()).goModel : (await loadPrefs()).zenModel
-    const fallback = endpoint === "go" ? FALLBACK_GO_MODEL : FALLBACK_ZEN_MODEL
-    const seed = remembered && isFreeModel(remembered, endpoint) ? remembered : fallback
-    await rememberModel(endpoint, seed)
-  } else if (switchTo === "local") {
-    const prefs = await loadPrefs()
-    if (prefs.provider === "zen" && prefs.model) await savePrefs({ zenModel: prefs.model })
-    if (prefs.provider === "go" && prefs.model) await savePrefs({ goModel: prefs.model })
-    await savePrefs({
-      provider: "local",
-      model: prefs.provider === "local" ? prefs.model || "beam-free" : "beam-free",
-      baseURL: prefs.baseURL || "http://127.0.0.1:8787/v1",
-    })
+  if (switchTo) {
+    const switched = await activateEndpoint(switchTo)
+    if (switched) {
+      console.error(switched)
+      process.exit(1)
+    }
   }
 
   let llm: LlmConfig
@@ -190,7 +200,7 @@ export async function run(args: string[]) {
 
   let ids: string[]
   try {
-    ids = await idsFor(llm)
+    ids = await listSelectableModels(llm)
   } catch (err) {
     console.error(err instanceof Error ? err.message : err)
     if (llm.provider === "local") {

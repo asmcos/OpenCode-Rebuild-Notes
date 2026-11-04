@@ -23,6 +23,8 @@ Commands:
   chat     Chat + tools read/write/shell (default provider=local :8787)
            chat [--agent <id>] [--model <id>] [--provider local|zen|go|openai]
                 [--no-stream] [--ask-external|--allow-external] [prompt]
+           Interactive: menu picks Zen / Go / local model or agent
+           /menu again inside the REPL · /exit to quit
            Default: external paths need permission (ask)
            --allow-external  allow external paths without asking
            --ask-external    force ask on external paths

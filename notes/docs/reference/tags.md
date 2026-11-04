@@ -37,6 +37,7 @@ git checkout main
 | `stage-03-write` | 已发布 | [06 write](/guide/06-tool-write)、[07 权限](/guide/07-permissions)、[04 Chat](/guide/04-chat-llm) | `write` + FileAccess；本地 `:8787` / `models`；permissions |
 | `stage-04-shell` | 已发布 | [08 工具 shell](/guide/08-tool-shell) | 受控 `shell` + permission `ask`；无 background |
 | `stage-05-zen-go` | 已发布 | [04 Chat](/guide/04-chat-llm) §4.6 | `models zen` / `models go` 互切；只列 free 模型 |
+| `stage-06-menu` | 已发布 | [04 Chat](/guide/04-chat-llm) | `bun run chat` 启动菜单：Zen / Go / 本地模型 / agent |
 | `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
 | `stage-06-session` | 计划中 | 09（待写） | messages 落盘；`chat --continue` |
 | `stage-07-search` | 计划中 | 10（待写） | `grep` / `glob` 迷你工具 |
@@ -51,6 +52,15 @@ git checkout main
 ## 后续计划详解（从 04 起）
 
 原则不变：**每阶段一小块、能指回上游相对路径、有验收命令**。permissions 已有，后面工具都挂同一套 `assert`。
+
+### `stage-06-menu`
+
+| 项 | 内容 |
+|----|------|
+| 对照 | 交互选择，相当于迷你 `/models` |
+| 迷你目标 | `bun run chat` 先出菜单，再进入 `you>`；对话中 `/menu` 可再换 |
+| 验收 | 选 Zen 免费模型序号后，头一行变成 `agent · model · zen` |
+| 文档 | 指南 **04** |
 
 ### `stage-05-zen-go`
 
@@ -125,7 +135,7 @@ git checkout main
 ## 推荐学习顺序（时间线）
 
 ```text
-已发布:  00 → 01 → 02 → 03 → 04-shell → 05-zen-go
+已发布:  00 → 01 → 02 → 03 → 04-shell → 05-zen-go → 06-menu
 接下来:  06-session → 07-search → 08-edit → 09-agents
 选做:    10+
 ```

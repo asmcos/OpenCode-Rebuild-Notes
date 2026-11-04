@@ -9,6 +9,7 @@
 import * as readline from "node:readline/promises"
 import { stdin as input, stdout as output } from "node:process"
 import { resolve } from "../../agent/registry"
+import type { AgentInfo } from "../../agent/info"
 import { loadLlmConfig } from "../../llm/config"
 import type { ChatMessage } from "../../llm/messages"
 import { agentLoop } from "../../llm/agent-loop"
@@ -17,6 +18,7 @@ import { loadPermissionOverlay } from "../../permission/load"
 import { createTtyAskHandler } from "../../permission/ask-tty"
 import type { PermissionRuntime } from "../../permission/assert"
 import { status } from "../../cli/tty"
+import { sessionMenu } from "../../cli/session-menu"
 
 const dim = (s: string) => `\x1b[36m${s}\x1b[0m`
 function info(line: string) {
@@ -73,7 +75,7 @@ function parseArgs(args: string[]) {
 export async function run(args: string[]) {
   const { agentId, model, provider, noStream, askExternal, allowExternal, prompt } =
     parseArgs(args)
-  const agent = resolve(agentId)
+  let agent = resolve(agentId)
   if (!agent) {
     console.error(agentId ? `agent not found: ${agentId}` : "no default agent")
     process.exit(1)
@@ -97,23 +99,45 @@ export async function run(args: string[]) {
     unattended,
   }
 
-  const externalPolicy = evaluate(
-    "external_directory",
-    "*",
-    permission.rules,
-    permission.saved,
-  ).effect
-
   const messages: ChatMessage[] = []
   if (agent.system) {
     messages.push({ role: "system", content: agent.system })
   }
 
-  info(`${agent.id} · ${llm.model} · ${llm.provider}`)
-  const shellPolicy = evaluate("shell", "*", permission.rules, permission.saved).effect
-  info(`tools read, write, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
-  info("/exit to quit")
-  console.log()
+  const banner = () => {
+    const externalPolicy = evaluate(
+      "external_directory",
+      "*",
+      permission.rules,
+      permission.saved,
+    ).effect
+    const shellPolicy = evaluate("shell", "*", permission.rules, permission.saved).effect
+    info(`${agent.id} · ${llm.model} · ${llm.provider}`)
+    info(`tools read, write, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
+    if (!prompt) info("/menu 菜单 · /exit 退出")
+    console.log()
+  }
+
+  const bindAgent = (next: AgentInfo) => {
+    agent = next
+    permission.rules = merge(next.permissions, overlay)
+    if (messages[0]?.role === "system") {
+      if (next.system) messages[0] = { role: "system", content: next.system }
+      else messages.shift()
+    } else if (next.system) {
+      messages.unshift({ role: "system", content: next.system })
+    }
+  }
+
+  banner()
+
+  if (!prompt && process.stdin.isTTY) {
+    const chosen = await sessionMenu({ agent, llm })
+    if (!chosen) return
+    bindAgent(chosen.agent)
+    llm = chosen.llm
+    banner()
+  }
 
   const runTurn = async (userText: string) => {
     messages.push({ role: "user", content: userText })
@@ -142,11 +166,7 @@ export async function run(args: string[]) {
       const msg = err instanceof Error ? err.message : String(err)
       console.error("\nError:", msg)
       if (/429|FreeUsageLimit|limit reached|go-limit/i.test(msg)) {
-        const other = llm.provider === "go" ? "zen" : "go"
-        console.error(
-          `→ Free / Go limit. Switch endpoint and pick another free model:\n` +
-            `  bun run models ${other}`,
-        )
+        console.error("→ 免费额度到了。在对话里输入 /menu 换另一侧的免费模型。")
       }
       if (/ECONNREFUSED|fetch failed/i.test(msg)) {
         console.error("→ Start local gateway first (zen-free-agent --api-only on :8787)")
@@ -171,6 +191,14 @@ export async function run(args: string[]) {
     }
     if (!line) continue
     if (line === "/exit" || line === "/quit") break
+    if (line === "/menu") {
+      const chosen = await sessionMenu({ agent, llm })
+      if (!chosen) break
+      bindAgent(chosen.agent)
+      llm = chosen.llm
+      banner()
+      continue
+    }
     await runTurn(line)
   }
 }
