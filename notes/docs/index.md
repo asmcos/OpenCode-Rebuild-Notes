@@ -1,5 +1,7 @@
 # OpenCode 复刻笔记
 
+克隆仓库后，先进 `rebuild/` 执行 `bun run chat`。菜单里选 **Zen 免费模型**，不用个人 API Key 就能让它读文件、写文件、跑命令。讲解从下面的顺序走；当前代码对应 tag **`stage-05-menu`**。
+
 ## 为什么做这个项目
 
 本项目的目的，是让大家**学会如何制作一个 agent**。
@@ -25,7 +27,7 @@
 | [01 读懂源码仓库](/guide/01-read-source) | 知道上游有哪些包、入口在哪、依赖怎么流 |
 | [02 第一个 bun 程序](/guide/02-hello-bun) | 在 `rebuild/` 里跑通最小 CLI |
 | [03 认识 Agent](/guide/03-what-is-agent) | 弄清 Agent 是「角色配置」，能 list/get 迷你 agent |
-| [04 最小 Chat](/guide/04-chat-llm) | 默认本地网关 `:8787`；`models zen` / `models go` 切换免费模型 |
+| [04 最小 Chat](/guide/04-chat-llm) | 真实对话；`stage-05-menu` 用菜单切换 Zen 免费 / Go / 本地 |
 | [05 工具 read](/guide/05-tool-read) | 模型可 tool_call → 本地读文件 → 再回答 |
 | [06 工具 write](/guide/06-tool-write) | 写文件（对齐 FileAccess；绝对路径可写） |
 | [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
@@ -47,12 +49,13 @@
 
 ```text
 OpenCode-Rebuild-Notes/
+├── README.md             # 仓库首页：三分钟试跑
 ├── notes/                # 文档站（VitePress）
 │   ├── .vitepress/       # 配置与主题微调
 │   ├── docs/             # 你现在看的 Markdown
 │   └── package.json
-├── rebuild/              # 我们自己写的复刻代码（从最小开始长）
-└── README.md
+├── rebuild/              # 迷你 agent：chat、工具、权限、菜单
+└── scripts/bun.sh        # 优先使用 Bun 1.4.x
 ```
 
 上游 OpenCode 源码**不在**本仓库里。请在本机另有一份克隆（例如与本仓库并列放在 `~/dev/opencode`）。文档里提到的源码路径一律写成**相对上游仓库根目录**的路径，例如：

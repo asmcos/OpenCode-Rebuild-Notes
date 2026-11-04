@@ -1,6 +1,6 @@
 # 04 接真实模型：最小 Chat
 
-目标：用上一章的 **agent.system** 当角色提示，默认走 **本地 OpenAI 兼容网关**（`http://127.0.0.1:8787/v1`，如 zen-free-agent），**不必配置个人 API Key**。Zen 直连仍可选，但常限流。
+目标：用上一章的 **agent.system** 当角色提示，接上真实模型，**不必配置个人 API Key**。当前 tag `stage-05-menu` 的入口是 `bun run chat` 的启动菜单（Zen 免费 / Go / 本地网关）。本章先把本地网关和直连讲清楚。
 
 预计时间：40–60 分钟。对应已发布 tag：`stage-01-chat`（含 03 的 agent 形状 + 本章 chat）。
 
@@ -49,8 +49,8 @@ cd ~/dev/OpenCode-Rebuild-Notes/rebuild
 bun run models              # 列出 /v1/models，可交互选择
 bun run models use beam-free
 
-bun run chat                # 先出菜单：Zen / Go / 本地模型 / agent
-bun run chat --model beam-free "只回复：OK"
+bun run chat                # 菜单：Zen 免费 / Go / 本地模型 / agent
+bun run chat --provider zen --model big-pickle "只回复：OK"
 bun run chat --no-stream --agent build "你好"
 ```
 
