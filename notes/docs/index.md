@@ -25,17 +25,16 @@
 | [01 读懂源码仓库](/guide/01-read-source) | 知道上游有哪些包、入口在哪、依赖怎么流 |
 | [02 第一个 bun 程序](/guide/02-hello-bun) | 在 `rebuild/` 里跑通最小 CLI |
 | [03 认识 Agent](/guide/03-what-is-agent) | 弄清 Agent 是「角色配置」，能 list/get 迷你 agent |
-| [04 最小 Chat](/guide/04-chat-llm) | 默认本地网关 `:8787` 对话 + `models` 选模型（无个人 Key） |
+| [04 最小 Chat](/guide/04-chat-llm) | 默认本地网关 `:8787`；`models zen` / `models go` 切换免费模型 |
 | [05 工具 read](/guide/05-tool-read) | 模型可 tool_call → 本地读文件 → 再回答 |
 | [06 工具 write](/guide/06-tool-write) | 写文件（对齐 FileAccess；绝对路径可写） |
 | [07 权限](/guide/07-permissions) | allow/ask/deny；external 路径 permission 框 |
 | [08 工具 shell](/guide/08-tool-shell) | 受控 shell（prepare → ask → 超时） |
 
-**已发布到 tag `stage-03-write`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
+**已发布到 tag `stage-05-zen-go`。** 后面按阶段推进（详见 [阶段与 Tag](/reference/tags)）：
 
 | 计划阶段 | 你要得到什么 |
 |----------|----------------|
-| `stage-04-shell` | 受控 shell + permission ask（指南 08） |
 | `stage-06-session` | 对话落盘、`--continue` |
 | `stage-07-search` | grep / glob |
 | `stage-08-edit` | 局部 edit（非整文件 overwrite） |

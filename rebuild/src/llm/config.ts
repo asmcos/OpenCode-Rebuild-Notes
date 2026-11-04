@@ -2,12 +2,42 @@
  * LLM connection.
  *
  * Default: local OpenAI-compatible gateway (zen-free-agent style on :8787).
- * Optional: zen (Bearer public) or openai (needs API key).
+ * Optional:
+ * - zen  — OpenCode Zen free (Bearer public)
+ * - go   — OpenCode Go free (Bearer oc_sk_…)
+ * - openai — any OpenAI-compatible endpoint with an API key
  */
 
-import { loadPrefs } from "./prefs"
+import {
+  FALLBACK_GO_MODEL,
+  FALLBACK_ZEN_MODEL,
+  GO_CHAT_URL,
+  ZEN_CHAT_URL,
+  isFreeModel,
+  normalizeModelID,
+  type FreeEndpoint,
+} from "./free-catalog"
+import { loadPrefs, type LlmPrefs } from "./prefs"
 
-export type LlmProvider = "local" | "zen" | "openai"
+export type LlmProvider = "local" | "zen" | "go" | "openai"
+
+export function resolveGoApiKey(prefs: LlmPrefs = {}) {
+  return (
+    process.env.OPENCODE_GO_API_KEY ||
+    process.env.OPENCODE_API_KEY ||
+    process.env.REBUILD_GO_API_KEY ||
+    prefs.goApiKey ||
+    ""
+  ).trim()
+}
+
+export function goKeySource(prefs: LlmPrefs = {}) {
+  if (process.env.OPENCODE_GO_API_KEY?.trim()) return "OPENCODE_GO_API_KEY"
+  if (process.env.OPENCODE_API_KEY?.trim()) return "OPENCODE_API_KEY"
+  if (process.env.REBUILD_GO_API_KEY?.trim()) return "REBUILD_GO_API_KEY"
+  if (prefs.goApiKey?.trim()) return "prefs"
+  return "missing"
+}
 
 export type LlmConfig = {
   provider: LlmProvider
@@ -40,25 +70,43 @@ export async function loadLlmConfig(overrides?: {
     "local"
   ).toLowerCase() as LlmProvider
 
-  const version = process.env.OPENCODE_VERSION || "2.2.0"
-  const modelOverride =
-    overrides?.model || process.env.REBUILD_LLM_MODEL || process.env.MODEL || prefs.model
-  const baseOverride =
-    overrides?.baseURL ||
-    process.env.REBUILD_LLM_BASE_URL ||
-    process.env.OPENAI_BASE_URL ||
-    prefs.baseURL
+  if (provider !== "local" && provider !== "zen" && provider !== "go" && provider !== "openai") {
+    throw new Error(`unknown provider: ${provider} (local | zen | go | openai)`)
+  }
 
-  if (provider === "zen") {
+  const version = process.env.OPENCODE_VERSION || "2.2.0"
+  const explicitModel = normalizeModelID(
+    overrides?.model || process.env.REBUILD_LLM_MODEL || process.env.MODEL || "",
+  )
+  const envBase = overrides?.baseURL || process.env.REBUILD_LLM_BASE_URL || process.env.OPENAI_BASE_URL
+
+  if (provider === "zen" || provider === "go") {
     assertBunForZen()
+    const endpoint = provider as FreeEndpoint
+    const remembered = endpoint === "go" ? prefs.goModel : prefs.zenModel
+    const model = explicitModel || remembered || (endpoint === "go" ? FALLBACK_GO_MODEL : FALLBACK_ZEN_MODEL)
+    if (!isFreeModel(model, endpoint)) {
+      throw new Error(
+        `only free models on ${endpoint}, rejected: ${model || "(empty)"}\n` +
+          `  bun run models ${endpoint}`,
+      )
+    }
+    if (endpoint === "go" && !resolveGoApiKey(prefs)) {
+      throw new Error(
+        "Go needs an API key (not stored in git).\n" +
+          "  OPENCODE_API_KEY=oc_sk_… bun run models go\n" +
+          "  or: bun run models key set oc_sk_…",
+      )
+    }
     return {
-      provider: "zen",
+      provider: endpoint,
+      apiKey: endpoint === "go" ? resolveGoApiKey(prefs) : undefined,
       baseURL: (
-        baseOverride ||
-        process.env.OPENCODE_ZEN_URL ||
-        "https://opencode.ai/inference/openai/v1"
+        envBase ||
+        (endpoint === "go" ? process.env.OPENCODE_GO_URL : process.env.OPENCODE_ZEN_URL) ||
+        (endpoint === "go" ? GO_CHAT_URL : ZEN_CHAT_URL)
       ).replace(/\/$/, ""),
-      model: modelOverride || "flint-40b-free",
+      model,
       version,
     }
   }
@@ -73,8 +121,8 @@ export async function loadLlmConfig(overrides?: {
     return {
       provider: "openai",
       apiKey,
-      baseURL: (baseOverride || "https://api.openai.com/v1").replace(/\/$/, ""),
-      model: modelOverride || process.env.OPENAI_MODEL || "gpt-4o-mini",
+      baseURL: (envBase || "https://api.openai.com/v1").replace(/\/$/, ""),
+      model: explicitModel || process.env.OPENAI_MODEL || "gpt-4o-mini",
       version,
     }
   }
@@ -83,8 +131,11 @@ export async function loadLlmConfig(overrides?: {
   return {
     provider: "local",
     apiKey: process.env.REBUILD_LLM_API_KEY || process.env.API_KEY || "sk-local",
-    baseURL: (baseOverride || "http://127.0.0.1:8787/v1").replace(/\/$/, ""),
-    model: modelOverride || "beam-free",
+    baseURL: (envBase || prefs.baseURL || "http://127.0.0.1:8787/v1").replace(/\/$/, ""),
+    model:
+      explicitModel ||
+      (prefs.provider === "local" || !prefs.provider ? prefs.model : undefined) ||
+      "beam-free",
     version,
   }
 }

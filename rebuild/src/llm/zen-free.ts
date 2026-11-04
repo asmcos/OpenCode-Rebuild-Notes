@@ -21,6 +21,8 @@ export type ZenCompleteInput = {
   sessionID?: string
   cwd?: string
   tools?: typeof TOOLS
+  /** Go uses `Bearer oc_sk_…`. Zen omits this and sends `Bearer public`. */
+  apiKey?: string
   onDelta?: (chunk: string) => void
 }
 
@@ -34,9 +36,9 @@ export function envBlock(cwd = process.cwd()) {
 </env>`
 }
 
-function sessionHeaders(sessionID: string, version: string) {
+function sessionHeaders(sessionID: string, version: string, apiKey?: string) {
   return {
-    Authorization: "Bearer public",
+    Authorization: apiKey ? `Bearer ${apiKey}` : "Bearer public",
     "Content-Type": "application/json",
     "User-Agent": `opencode/latest/${version}/cli`,
     "x-opencode-client": "cli",
@@ -75,7 +77,7 @@ export async function zenComplete(
 
   const res = await fetch(`${input.baseURL}/chat/completions`, {
     method: "POST",
-    headers: sessionHeaders(sessionID, input.version),
+    headers: sessionHeaders(sessionID, input.version, input.apiKey),
     body: JSON.stringify({
       model: input.model,
       stream: true,

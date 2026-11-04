@@ -36,7 +36,8 @@ git checkout main
 | `stage-02-tools` | 已发布 | [05 工具 read](/guide/05-tool-read) | `read` 真执行 + agent 循环；`bun run chat` 出现 `[tool]` |
 | `stage-03-write` | 已发布 | [06 write](/guide/06-tool-write)、[07 权限](/guide/07-permissions)、[04 Chat](/guide/04-chat-llm) | `write` + FileAccess；本地 `:8787` / `models`；permissions |
 | `stage-04-shell` | 已发布 | [08 工具 shell](/guide/08-tool-shell) | 受控 `shell` + permission `ask`；无 background |
-| `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打 tag |
+| `stage-05-zen-go` | 已发布 | [04 Chat](/guide/04-chat-llm) §4.6 | `models zen` / `models go` 互切；只列 free 模型 |
+| `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
 | `stage-06-session` | 计划中 | 09（待写） | messages 落盘；`chat --continue` |
 | `stage-07-search` | 计划中 | 10（待写） | `grep` / `glob` 迷你工具 |
 | `stage-08-edit` | 计划中 | 11（待写） | `edit`（局部补丁，非整文件 overwrite） |
@@ -51,7 +52,16 @@ git checkout main
 
 原则不变：**每阶段一小块、能指回上游相对路径、有验收命令**。permissions 已有，后面工具都挂同一套 `assert`。
 
-### `stage-04-shell` — 下一步
+### `stage-05-zen-go`
+
+| 项 | 内容 |
+|----|------|
+| 对照 | 本地示例 `zen-free-agent` 的 Zen / Go 上游（不锁死 Go 模型，方便测试来回换） |
+| 迷你目标 | `models zen` 与 `models go` 互切；目录只保留 free |
+| 验收 | 两次 `models use` 后 `chat` 头一行的 `provider/model` 跟着变 |
+| 文档 | 指南 **04** §4.6 |
+
+### `stage-04-shell`
 
 | 项 | 内容 |
 |----|------|
@@ -115,8 +125,8 @@ git checkout main
 ## 推荐学习顺序（时间线）
 
 ```text
-已发布:  00 → 01 → 02 → 03
-接下来:  04-shell → 06-session → 07-search → 08-edit → 09-agents
+已发布:  00 → 01 → 02 → 03 → 04-shell → 05-zen-go
+接下来:  06-session → 07-search → 08-edit → 09-agents
 选做:    10+
 ```
 

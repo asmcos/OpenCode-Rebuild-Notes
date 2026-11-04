@@ -47,7 +47,7 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
 
     let message: Extract<ChatMessage, { role: "assistant" }>
 
-    if (llm.provider === "zen") {
+    if (llm.provider === "zen" || llm.provider === "go") {
       const result = await zenComplete({
         baseURL: llm.baseURL,
         model: llm.model,
@@ -55,6 +55,7 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
         messages,
         sessionID,
         cwd,
+        apiKey: llm.provider === "go" ? llm.apiKey : undefined,
         onDelta: input.onDelta,
       })
       message = result.message

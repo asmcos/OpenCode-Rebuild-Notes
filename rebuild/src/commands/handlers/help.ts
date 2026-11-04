@@ -14,11 +14,14 @@ Commands:
   version  Print version
   hello    Print a greeting (optionally: hello <name>)
   agent    Agent helpers: list | get <id> | resolve [id]
-  models   List / select models from local OpenAI gateway
-           models              # list (+ interactive pick)
-           models use <id|n>   # save selection to .rebuild-llm.json
+  models   List / select models. zen and go show free models only.
+           models                 # current endpoint
+           models zen | models go # switch endpoint, list free models
+           models use <id|n>      # save model (also: models use go <id>)
+           models local           # back to :8787 gateway
+           models key set <oc_sk> # Go key, gitignored prefs
   chat     Chat + tools read/write/shell (default provider=local :8787)
-           chat [--agent <id>] [--model <id>] [--provider local|zen|openai]
+           chat [--agent <id>] [--model <id>] [--provider local|zen|go|openai]
                 [--no-stream] [--ask-external|--allow-external] [prompt]
            Default: external paths need permission (ask)
            --allow-external  allow external paths without asking

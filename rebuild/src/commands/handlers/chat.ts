@@ -141,10 +141,11 @@ export async function run(args: string[]) {
       messages.pop()
       const msg = err instanceof Error ? err.message : String(err)
       console.error("\nError:", msg)
-      if (/429|FreeUsageLimit|limit reached/i.test(msg)) {
+      if (/429|FreeUsageLimit|limit reached|go-limit/i.test(msg)) {
+        const other = llm.provider === "go" ? "zen" : "go"
         console.error(
-          "→ Free limit / Zen gate. Prefer local gateway:\n" +
-            "  REBUILD_LLM_PROVIDER=local bun run chat",
+          `→ Free / Go limit. Switch endpoint and pick another free model:\n` +
+            `  bun run models ${other}`,
         )
       }
       if (/ECONNREFUSED|fetch failed/i.test(msg)) {
