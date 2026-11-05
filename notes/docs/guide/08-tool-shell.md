@@ -15,6 +15,8 @@
 
 `prepare` 顺序（必须同构）：
 
+<Picture name="shellrun" />
+
 <Figure name="shell" />
 
 文字版同一顺序：

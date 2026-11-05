@@ -12,6 +12,8 @@
 
 在 OpenCode 里，Agent 是一份可以换上换下的角色，不是整个程序本身。
 
+<Picture name="role" />
+
 <Figure name="agent" />
 
 所以「做 agent」第一步不是接大模型 API，而是：**说清楚一个 agent 的数据结构长什么样**。

@@ -2,6 +2,8 @@
 
 目标：模型不用猜路径，也不必用 `shell` 去搜。先用图看它该怎么找，再看命令。
 
+<Picture name="finder" />
+
 <Figure name="search" />
 
 预计时间：30–45 分钟。对应 tag：`stage-06-search`。

@@ -23,6 +23,8 @@
 
 这样说「写到 /tmp」会先看到权限提示。若要完全贴 schema 默认：`bun run chat --allow-external`。
 
+<Picture name="gate" />
+
 <Figure name="permissions" />
 
 ## 7.2 期望对话形态

@@ -18,7 +18,7 @@
   </ul>
 </div>
 
-<Ink name="handoff" />
+<Picture name="handoff" />
 
 ## 怎么开始
 
@@ -40,6 +40,8 @@
 </Grid>
 
 <p class="oc-note">还没做：会话落盘（stage-07）、局部 edit（stage-08）、真正派出 explore（stage-09）。每课末尾有验收清单，勾完再往下。</p>
+
+<Picture name="stages" />
 
 <Picture name="endpoints" />
 

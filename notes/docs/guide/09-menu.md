@@ -25,6 +25,8 @@
 
 启动时先停在菜单。选模型之后才进入 `you>`。对话中途输入 `/menu` 可以再打开一次。
 
+<Picture name="endpoints" />
+
 <Figure name="menu" />
 
 ```bash
