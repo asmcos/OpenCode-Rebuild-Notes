@@ -3,6 +3,7 @@
 ## 源码出处怎么写
 
 - 只写**相对上游仓库根目录**的路径，例如 `packages/cli/src/index.ts`
+- 文档正文和表格里的这种路径会链到 [笔记锁定的那次提交](https://github.com/anomalyco/opencode/tree/fa1260d6ca484fe0fd868aa992ad81ab85343cf3)。代码块里的命令仍是本机要敲的字，不会变成链接
 - 不要写 `/home/.../opencode/...` 这类绝对路径
 - 代码文件顶部用简短注释列出 inspired-by 路径
 - 文档表格用「出处：`相对路径`」

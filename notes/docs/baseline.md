@@ -10,10 +10,11 @@
 |----|-----|
 | 笔记开始日期 | **2026-10-29** |
 | 上游仓库 | [anomalyco/opencode](https://github.com/anomalyco/opencode) |
+| 笔记仓库 | [asmcos/OpenCode-Rebuild-Notes](https://github.com/asmcos/OpenCode-Rebuild-Notes) |
 | 默认分支习惯 | `dev`（见上游 `AGENTS.md`） |
 | `package.json` version | **2.2.0** |
 | 基线时 packageManager | **bun@1.4.4**（以根 `package.json` 的 `packageManager` 为准；换基线后请重读该字段） |
-| 锁定 commit | `fa1260d6ca484fe0fd868aa992ad81ab85343cf3` |
+| 锁定 commit | [`fa1260d6ca484fe0fd868aa992ad81ab85343cf3`](https://github.com/anomalyco/opencode/commit/fa1260d6ca484fe0fd868aa992ad81ab85343cf3) |
 | 短 hash | `fa1260d6ca` |
 | commit 日期 | 2026-10-28 |
 | commit 说明 | `fix(tui): send pasted image and PDF paths to local servers (#59833)` |

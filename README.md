@@ -55,9 +55,9 @@ bun run dev
 | `stage-03-write` | `write`、本地网关、权限 |
 | `stage-04-shell` | 受控 `shell`，执行前询问 |
 | `stage-05-menu` | 菜单切换 Zen / Go / 本地模型。讲解：[09 启动菜单](notes/docs/guide/09-menu.md) |
-| `stage-06-search` | `grep` / `glob` 找文件。讲解：[10 grep / glob](notes/docs/guide/10-search.md) |
+| `stage-06-search` | `grep` / `glob` 找文件。讲解：[10 搜索](notes/docs/guide/10-search.md) |
 
-下一步还没做：会话落盘、搜索、局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。
+下一步还没做：会话落盘、局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。
 
 ## 基线
 

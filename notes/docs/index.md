@@ -22,28 +22,35 @@
 
 ## 怎么开始
 
-按卡片走。不要跳课：前面的环境、源码地图和第一个 CLI，是后面 agent 的地基。
+从锁定的提交走到搜索。每一组里的课按顺序来，每课末尾有验收清单。
 
+<p class="oc-path">先安顿</p>
 <Grid>
-  <Card href="/baseline" no="基线" title="锁定对照的 commit">知道我们读的是 OpenCode 2.2.0 的哪一次提交。</Card>
-  <Card href="/guide/00-env" no="00" title="环境">装好 Bun 1.4.4，笔记仓库和上游源码并排放。</Card>
-  <Card href="/guide/01-read-source" no="01" title="读仓库">包怎么分、入口在哪、依赖往哪流。</Card>
-  <Card href="/guide/02-hello-bun" no="02" title="第一个程序">在 rebuild/ 里跑通 help、version、hello。</Card>
-  <Card href="/guide/03-what-is-agent" no="03" title="Agent 是什么">一份角色配置：提示、模式、权限。不是整个程序。</Card>
-  <Card href="/guide/04-chat-llm" no="04" title="接上模型">真实对话。后来的菜单课负责换 Zen / Go。</Card>
-  <Card href="/guide/05-tool-read" no="05" title="工具循环">模型发出 read，本地执行，再把内容喂回去。</Card>
-  <Card href="/guide/06-tool-write" no="06" title="写文件">整文件写入。仓库外的路径要先得到允许。</Card>
-  <Card href="/guide/07-permissions" no="07" title="权限">allow / ask / deny。询问发生在 harness，不发生在模型嘴里。</Card>
-  <Card href="/guide/08-tool-shell" no="08" title="受控 shell">先 prepare，再询问，再执行。没有后台任务。</Card>
-  <Card href="/guide/09-menu" no="09" title="启动菜单">tag stage-05-menu。用菜单切换 Zen、Go、本地和 agent。</Card>
-  <Card href="/guide/10-search" no="10" title="grep / glob">tag stage-06-search。先找到文件，再去读。</Card>
+  <Card href="/baseline" no="基线" title="锁定提交">对照 OpenCode 2.2.0 的哪一次提交。</Card>
+  <Card href="/guide/00-env" no="00" title="环境">Bun 1.4.4，笔记和上游源码并排放。</Card>
+  <Card href="/guide/01-read-source" no="01" title="读仓库">包怎么分，入口在哪。</Card>
+  <Card href="/guide/02-hello-bun" no="02" title="第一个程序">跑通 help、version、hello。</Card>
 </Grid>
 
-<p class="oc-note">还没做：会话落盘（stage-07）、局部 edit（stage-08）、真正派出 explore（stage-09）。每课末尾有验收清单，勾完再往下。</p>
-
-<Picture name="stages" />
+<p class="oc-path">接上模型</p>
+<Grid>
+  <Card href="/guide/03-what-is-agent" no="03" title="角色">提示、模式、权限。Agent 是一张卡片。</Card>
+  <Card href="/guide/04-chat-llm" no="04" title="对话">接上真实模型。</Card>
+  <Card href="/guide/09-menu" no="09" title="菜单">tag stage-05-menu。切换 Zen、Go、本地。</Card>
+</Grid>
 
 <Picture name="endpoints" />
+
+<p class="oc-path">让它干活</p>
+<Grid>
+  <Card href="/guide/05-tool-read" no="05" title="读文件">模型发出 read，本地执行后再答。</Card>
+  <Card href="/guide/06-tool-write" no="06" title="写文件">整文件写入。仓库外要先得到允许。</Card>
+  <Card href="/guide/07-permissions" no="07" title="权限">允许、询问、拒绝，发生在程序里。</Card>
+  <Card href="/guide/08-tool-shell" no="08" title="命令">先准备，再询问，再执行。</Card>
+  <Card href="/guide/10-search" no="10" title="搜索">tag stage-06-search。先找到文件，再去读。</Card>
+</Grid>
+
+<p class="oc-note">下一课是会话落盘（stage-07）。后面还有局部修改（stage-08）和真正派出 explore（stage-09）。</p>
 
 ## 为什么做这个项目
 
@@ -78,7 +85,7 @@ OpenCode-Rebuild-Notes/
 packages/cli/src/index.ts
 ```
 
-而不是绝对路径。
+而不是绝对路径。正文里的路径，例如 `packages/cli/src/index.ts`，可以点开，会到锁定提交上的 GitHub 文件。这份笔记本身在 [asmcos/OpenCode-Rebuild-Notes](https://github.com/asmcos/OpenCode-Rebuild-Notes)。
 
 ## 设计原则（复刻节奏）
 

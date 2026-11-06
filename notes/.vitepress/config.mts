@@ -30,6 +30,49 @@ async function loadLocal(): Promise<{ config: UserConfig; from?: string }> {
   return { config: {} }
 }
 
+const UPSTREAM = "https://github.com/anomalyco/opencode"
+const UPSTREAM_COMMIT = "fa1260d6ca484fe0fd868aa992ad81ab85343cf3"
+const NOTES_REPO = "https://github.com/asmcos/OpenCode-Rebuild-Notes"
+
+/** 正文里的 `packages/...` 指向上游锁定提交，代码块里的命令保持原样。 */
+function linkUpstreamPaths(md: { core: { ruler: { after: Function } } }) {
+  md.core.ruler.after("inline", "oc-github-path", (state: {
+    tokens: { type: string; children?: { type: string; content: string; tag: string; nesting: number; attrs?: [string, string][] }[] }[]
+    Token: new (type: string, tag: string, nesting: number) => { type: string; tag: string; nesting: number; attrs?: [string, string][]; content: string }
+  }) => {
+    for (const token of state.tokens) {
+      const children = token.children
+      if (token.type !== "inline" || !children) continue
+      for (let i = 0; i < children.length; i++) {
+        const current = children[i]
+        if (current.type !== "code_inline") continue
+        const href = upstreamHref(current.content)
+        if (!href) continue
+        const open = new state.Token("link_open", "a", 1)
+        open.attrs = [
+          ["href", href],
+          ["class", "oc-src"],
+          ["target", "_blank"],
+          ["rel", "noreferrer"],
+        ]
+        const close = new state.Token("link_close", "a", -1)
+        children.splice(i, 1, open, current, close)
+        i += 2
+      }
+    }
+  })
+}
+
+function upstreamHref(raw: string): string | null {
+  const path = raw.trim().replace(/\/+$/, "")
+  if (!/^(?:packages\/[A-Za-z0-9_./-]+|package\.json|AGENTS\.md|CONTRIBUTING\.md)$/.test(path)) {
+    return null
+  }
+  if (path.includes("..")) return null
+  const kind = /\.[a-z0-9]+$/i.test(path) ? "blob" : "tree"
+  return `${UPSTREAM}/${kind}/${UPSTREAM_COMMIT}/${path}`
+}
+
 const { config: local, from: localFrom } = await loadLocal()
 const base = (process.env.VP_BASE || local.base || "/") as string
 if (localFrom) {
@@ -44,6 +87,9 @@ export default defineConfig({
   srcDir: "docs",
   cleanUrls: true,
   lastUpdated: true,
+  markdown: {
+    config: linkUpstreamPaths,
+  },
   // 默认 "/"；个人目录：config.local.mjs 的 base，或环境变量 VP_BASE
   base,
 
@@ -57,6 +103,10 @@ export default defineConfig({
     darkModeSwitchTitle: "切换到深色",
     returnToTopLabel: "回到顶部",
     sidebarMenuLabel: "菜单",
+    editLink: {
+      pattern: `${NOTES_REPO}/edit/main/notes/docs/:path`,
+      text: "在 GitHub 上改这一页",
+    },
     docFooter: {
       prev: "上一篇",
       next: "下一篇",
@@ -81,6 +131,8 @@ export default defineConfig({
     nav: [
       { text: "首页", link: "/" },
       { text: "基线", link: "/baseline" },
+      { text: "笔记仓库", link: NOTES_REPO },
+      { text: "上游源码", link: `${UPSTREAM}/tree/${UPSTREAM_COMMIT}` },
       {
         text: "动手指南",
         items: [
@@ -94,7 +146,7 @@ export default defineConfig({
           { text: "07 权限 permissions", link: "/guide/07-permissions" },
           { text: "08 工具 shell", link: "/guide/08-tool-shell" },
           { text: "09 启动菜单", link: "/guide/09-menu" },
-          { text: "10 grep / glob", link: "/guide/10-search" },
+          { text: "10 搜索", link: "/guide/10-search" },
         ],
       },
       {
@@ -127,7 +179,7 @@ export default defineConfig({
           { text: "07 权限 permissions", link: "/guide/07-permissions" },
           { text: "08 工具 shell", link: "/guide/08-tool-shell" },
           { text: "09 启动菜单", link: "/guide/09-menu" },
-          { text: "10 grep / glob", link: "/guide/10-search" },
+          { text: "10 搜索", link: "/guide/10-search" },
         ],
       },
       {
@@ -142,12 +194,12 @@ export default defineConfig({
     socialLinks: [
       {
         icon: "github",
-        link: "https://github.com/anomalyco/opencode",
-        ariaLabel: "上游 OpenCode",
+        link: NOTES_REPO,
+        ariaLabel: "笔记仓库 OpenCode-Rebuild-Notes",
       },
     ],
     footer: {
-      message: "对照上游 OpenCode 2.2.0 · commit fa1260d6ca · 笔记始于 2026-10-29",
+      message: `笔记仓库 <a href="${NOTES_REPO}">asmcos/OpenCode-Rebuild-Notes</a> · 上游 <a href="${UPSTREAM}/tree/${UPSTREAM_COMMIT}">OpenCode 2.2.0 · fa1260d6ca</a>`,
       copyright: "复刻学习笔记 · 静态站由 VitePress 构建",
     },
   },
