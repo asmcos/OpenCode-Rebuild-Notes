@@ -49,9 +49,10 @@
   <Card href="/guide/08-tool-shell" no="08" title="命令">先准备，再询问，再执行。</Card>
   <Card href="/guide/10-search" no="10" title="搜索">tag stage-06-search。先找到文件，再去读。</Card>
   <Card href="/guide/11-session" no="11" title="会话">退出后再接着聊。</Card>
+  <Card href="/guide/12-tool-edit" no="12" title="局部修改">只换文件里的一段，对不上就不写。</Card>
 </Grid>
 
-<p class="oc-note">后面还空着局部修改（stage-08）和真正派出 explore（stage-09）。</p>
+<p class="oc-note">后面还空着真正派出 explore（stage-09）。</p>
 
 ## 为什么做这个项目
 

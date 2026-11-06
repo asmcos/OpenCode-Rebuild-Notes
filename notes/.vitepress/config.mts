@@ -148,6 +148,7 @@ export default defineConfig({
           { text: "09 启动菜单", link: "/guide/09-menu" },
           { text: "10 搜索", link: "/guide/10-search" },
           { text: "11 会话", link: "/guide/11-session" },
+          { text: "12 局部修改", link: "/guide/12-tool-edit" },
         ],
       },
       {
@@ -182,6 +183,7 @@ export default defineConfig({
           { text: "09 启动菜单", link: "/guide/09-menu" },
           { text: "10 搜索", link: "/guide/10-search" },
           { text: "11 会话", link: "/guide/11-session" },
+          { text: "12 局部修改", link: "/guide/12-tool-edit" },
         ],
       },
       {

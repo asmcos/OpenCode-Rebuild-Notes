@@ -74,4 +74,4 @@ bun run chat --continue -- "我刚才说的文件名是什么"
 - [ ] `bun run sessions` 能看到 id 和标题
 - [ ] 目录 `rebuild/.sessions/` 不在 git 里
 
-下一步：局部 `edit`，见 [阶段与 Tag](/reference/tags) 里的 `stage-08-edit`。
+下一步：[12 局部修改](/guide/12-tool-edit)（tag `stage-08-edit`）。

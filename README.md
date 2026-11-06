@@ -2,7 +2,7 @@
 
 对照 [OpenCode](https://github.com/anomalyco/opencode) 的源码，从零搭一个能对话、读文件、改文件、跑命令的迷你 coding agent。每完成一块就有文档和 git tag，克隆下来就能跑，不必先读完上游。
 
-当前进度：**`stage-06-search`**。模型可以用 `grep` / `glob` 在仓库里找代码；`bun run chat` 的菜单仍然用来切换 **Zen 免费模型**、**OpenCode Go** 或本地网关。
+当前进度：**`stage-08-edit`**。模型可以用 `edit` 只改文件里的一段。退出后 `bun run chat --continue` 还能接着聊；`/menu` 切换 **Zen 免费模型**、**OpenCode Go** 或本地网关。
 
 ## 三分钟试一次
 
@@ -37,7 +37,7 @@ bun run dev
 |------|----------------|
 | 选模型和 agent | 对话里输入 `/menu` |
 | 免费模型 | Zen：`Bearer public`；Go：你的 key。列表里只有 free 模型 |
-| 读、写、执行命令 | 让它读文件、写文件、跑 `ls` 这类命令 |
+| 读、写、改一段、执行命令 | 让它读文件、写文件、用 `edit` 改一段，或跑 `ls` 这类命令 |
 | 权限 | 写仓库外路径、跑 shell 时会停下来问你 |
 | 按阶段回看 | `git checkout stage-05-menu`（更早的 tag 见下表） |
 
@@ -57,8 +57,9 @@ bun run dev
 | `stage-05-menu` | 菜单切换 Zen / Go / 本地模型。讲解：[09 启动菜单](notes/docs/guide/09-menu.md) |
 | `stage-06-search` | `grep` / `glob` 找文件。讲解：[10 搜索](notes/docs/guide/10-search.md) |
 | `stage-07-session` | 会话落盘，`chat --continue`。讲解：[11 会话](notes/docs/guide/11-session.md) |
+| `stage-08-edit` | `edit` 按原文替换一段。讲解：[12 局部修改](notes/docs/guide/12-tool-edit.md) |
 
-下一步还没做：局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。会话落盘的用法见 [11 会话](notes/docs/guide/11-session.md)。
+下一步还没做：子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。局部修改的用法见 [12 局部修改](notes/docs/guide/12-tool-edit.md)。
 
 ## 基线
 

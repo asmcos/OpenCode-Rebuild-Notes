@@ -41,9 +41,9 @@ git checkout main
 | `notes-illustrations` | 文档快照 | [首页](/) | 白底笔记上的第一张线稿。不是新的 agent 阶段，`stage-07` 仍留给会话落盘 |
 | `stage-06-session` | 改为 `stage-07-session` | — | 06 留给搜索，勿再打这个名字 |
 | `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
-| `stage-07-session` | 计划中 | [11 会话](/guide/11-session) | messages 落盘；`chat --continue` |
+| `stage-07-session` | 已发布 | [11 会话](/guide/11-session) | messages 落盘；`chat --continue` |
 | `stage-07-search` | 已并入 `stage-06-search` | [10](/guide/10-search) | 提前做成 06，勿再单独打 tag |
-| `stage-08-edit` | 计划中 | 12（待写） | `edit`（局部补丁，非整文件 overwrite） |
+| `stage-08-edit` | 已发布 | [12 局部修改](/guide/12-tool-edit) | `edit`：唯一匹配才替换；失败不改文件 |
 | `stage-09-agents` | 计划中 | 13（待写） | 多 agent / subagent 调度（explore 真跑起来） |
 | `stage-10-…` | 选做 | — | webfetch、todo、轻量 TUI、MCP 等 |
 
@@ -106,7 +106,7 @@ git checkout main
 | 必做 | 与 `write` 一样走 `edit` permission；唯一匹配才替换 |
 | 不做 | diff 预览 UI、undo 栈、formatter |
 | 验收 | 改 `fixtures/hello.txt` 一行，read 回来确认 |
-| 文档 | 指南 **12 edit** |
+| 文档 | 指南 **[12 局部修改](/guide/12-tool-edit)** |
 
 ### `stage-09-agents`
 
@@ -128,8 +128,8 @@ git checkout main
 ## 推荐学习顺序（时间线）
 
 ```text
-已发布:  00 → 01 → 02 → 03 → 04-shell → 05-menu → 06-search
-接下来:  07-session → 08-edit → 09-agents
+已发布:  00 → 01 → 02 → 03 → 04-shell → 05-menu → 06-search → 07-session → 08-edit
+接下来:  09-agents
 选做:    10+
 ```
 

@@ -4,6 +4,7 @@
  * Inspired by (upstream relative paths):
  * - packages/core/src/tool/plugin/read.ts
  * - packages/core/src/tool/plugin/write.ts
+ * - packages/core/src/tool/plugin/edit.ts
  * - packages/core/src/tool/plugin/shell.ts
  */
 
@@ -49,6 +50,35 @@ export const WRITE_TOOL = {
         },
       },
       required: ["path", "content"],
+      additionalProperties: false,
+    },
+  },
+}
+
+export const EDIT_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "edit",
+    description:
+      "Replace exact text in an existing file. oldString must match once, including whitespace. " +
+      "If it matches more than once, the edit fails unless replaceAll is true. " +
+      "Use write to create a file or replace its whole contents. Do not use edit for that.",
+    parameters: {
+      type: "object",
+      properties: {
+        path: { type: "string", description: "File to edit" },
+        oldString: { type: "string", description: "Exact text to find and replace" },
+        newString: {
+          type: "string",
+          description: "Text to replace oldString with (must differ from oldString)",
+        },
+        replaceAll: {
+          type: "boolean",
+          description:
+            "Replace every occurrence. When false or omitted, oldString must match exactly once.",
+        },
+      },
+      required: ["path", "oldString", "newString"],
       additionalProperties: false,
     },
   },
@@ -126,4 +156,4 @@ export const GLOB_TOOL = {
   },
 }
 
-export const TOOLS = [READ_TOOL, WRITE_TOOL, SHELL_TOOL, GREP_TOOL, GLOB_TOOL]
+export const TOOLS = [READ_TOOL, WRITE_TOOL, EDIT_TOOL, SHELL_TOOL, GREP_TOOL, GLOB_TOOL]

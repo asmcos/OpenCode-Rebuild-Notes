@@ -7,6 +7,7 @@
 
 import { readFileTool } from "./read"
 import { writeFileTool } from "./write"
+import { editFileTool } from "./edit"
 import { shellTool } from "./shell"
 import { globTool, grepTool } from "./search"
 import type { PermissionRuntime } from "../permission/assert"
@@ -47,6 +48,19 @@ export async function runTool(
       {
         path: typeof args.path === "string" ? args.path : undefined,
         content: typeof args.content === "string" ? args.content : undefined,
+      },
+      cwd,
+      context.permission,
+    )
+  }
+
+  if (name === "edit") {
+    return editFileTool(
+      {
+        path: typeof args.path === "string" ? args.path : undefined,
+        oldString: typeof args.oldString === "string" ? args.oldString : undefined,
+        newString: typeof args.newString === "string" ? args.newString : undefined,
+        replaceAll: typeof args.replaceAll === "boolean" ? args.replaceAll : undefined,
       },
       cwd,
       context.permission,
