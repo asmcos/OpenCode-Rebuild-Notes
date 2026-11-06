@@ -22,7 +22,7 @@
 
 ## 怎么开始
 
-从锁定的提交走到搜索。每一组里的课按顺序来，每课末尾有验收清单。
+从锁定的提交走到会话。每一组里的课按顺序来，每课末尾有验收清单。
 
 <p class="oc-path">先安顿</p>
 <Grid>
@@ -48,9 +48,10 @@
   <Card href="/guide/07-permissions" no="07" title="权限">允许、询问、拒绝，发生在程序里。</Card>
   <Card href="/guide/08-tool-shell" no="08" title="命令">先准备，再询问，再执行。</Card>
   <Card href="/guide/10-search" no="10" title="搜索">tag stage-06-search。先找到文件，再去读。</Card>
+  <Card href="/guide/11-session" no="11" title="会话">退出后再接着聊。</Card>
 </Grid>
 
-<p class="oc-note">下一课是会话落盘（stage-07）。后面还有局部修改（stage-08）和真正派出 explore（stage-09）。</p>
+<p class="oc-note">后面还空着局部修改（stage-08）和真正派出 explore（stage-09）。</p>
 
 ## 为什么做这个项目
 

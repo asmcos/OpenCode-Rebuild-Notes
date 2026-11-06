@@ -19,6 +19,7 @@ rebuild/node_modules/
 rebuild/.env
 rebuild/.rebuild-llm.json
 rebuild/.rebuild-permissions.json
+rebuild/.sessions/
 .env
 rebuild/fixtures/out-*.txt
 *.log

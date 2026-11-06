@@ -147,6 +147,7 @@ export default defineConfig({
           { text: "08 工具 shell", link: "/guide/08-tool-shell" },
           { text: "09 启动菜单", link: "/guide/09-menu" },
           { text: "10 搜索", link: "/guide/10-search" },
+          { text: "11 会话", link: "/guide/11-session" },
         ],
       },
       {
@@ -180,6 +181,7 @@ export default defineConfig({
           { text: "08 工具 shell", link: "/guide/08-tool-shell" },
           { text: "09 启动菜单", link: "/guide/09-menu" },
           { text: "10 搜索", link: "/guide/10-search" },
+          { text: "11 会话", link: "/guide/11-session" },
         ],
       },
       {

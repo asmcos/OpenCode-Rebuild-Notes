@@ -19,6 +19,13 @@ import { createTtyAskHandler } from "../../permission/ask-tty"
 import type { PermissionRuntime } from "../../permission/assert"
 import { status } from "../../cli/tty"
 import { sessionMenu } from "../../cli/session-menu"
+import {
+  createSession,
+  latestSession,
+  loadSession,
+  saveSession,
+  type StoredSession,
+} from "../../session/store"
 
 const dim = (s: string) => `\x1b[36m${s}\x1b[0m`
 function info(line: string) {
@@ -32,6 +39,8 @@ function parseArgs(args: string[]) {
   let noStream = false
   let askExternal = false
   let allowExternal = false
+  let continueFlag = false
+  let continueId: string | undefined
   const positional: string[] = []
   for (let i = 0; i < args.length; i++) {
     const a = args[i]
@@ -59,6 +68,13 @@ function parseArgs(args: string[]) {
       allowExternal = true
       continue
     }
+    if (a === "--continue" || a === "-c") {
+      continueFlag = true
+      const next = args[i + 1]
+      if (next && !next.startsWith("-")) continueId = args[++i]
+      continue
+    }
+    if (a === "--") continue
     positional.push(a)
   }
   return {
@@ -68,14 +84,40 @@ function parseArgs(args: string[]) {
     noStream,
     askExternal,
     allowExternal,
+    continueFlag,
+    continueId,
     prompt: positional.join(" ").trim(),
   }
 }
 
 export async function run(args: string[]) {
-  const { agentId, model, provider, noStream, askExternal, allowExternal, prompt } =
-    parseArgs(args)
-  let agent = resolve(agentId)
+  const {
+    agentId,
+    model,
+    provider,
+    noStream,
+    askExternal,
+    allowExternal,
+    continueFlag,
+    continueId,
+    prompt,
+  } = parseArgs(args)
+
+  let stored: StoredSession | null = null
+  if (continueFlag) {
+    try {
+      stored = continueId ? await loadSession(continueId) : await latestSession()
+    } catch (err) {
+      console.error(err instanceof Error ? err.message : err)
+      process.exit(1)
+    }
+    if (!stored) {
+      console.error("no sessions yet")
+      process.exit(1)
+    }
+  }
+
+  let agent = resolve(agentId ?? stored?.agentId)
   if (!agent) {
     console.error(agentId ? `agent not found: ${agentId}` : "no default agent")
     process.exit(1)
@@ -99,10 +141,11 @@ export async function run(args: string[]) {
     unattended,
   }
 
-  const messages: ChatMessage[] = []
-  if (agent.system) {
+  const messages: ChatMessage[] = stored ? stored.messages : []
+  if (!stored && agent.system) {
     messages.push({ role: "system", content: agent.system })
   }
+  if (!stored) stored = createSession(agent.id, messages)
 
   const banner = () => {
     const externalPolicy = evaluate(
@@ -113,6 +156,7 @@ export async function run(args: string[]) {
     ).effect
     const shellPolicy = evaluate("shell", "*", permission.rules, permission.saved).effect
     info(`${agent.id} · ${llm.model} · ${llm.provider}`)
+    info(`session ${stored.id}${continueFlag ? ` · ${stored.title}` : ""}`)
     info(`tools read, write, grep, glob, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
     if (!prompt) info("/menu 菜单 · ↑ 上一条 · /exit 退出")
     console.log()
@@ -120,6 +164,7 @@ export async function run(args: string[]) {
 
   const bindAgent = (next: AgentInfo) => {
     agent = next
+    if (stored) stored.agentId = next.id
     permission.rules = merge(next.permissions, overlay)
     if (messages[0]?.role === "system") {
       if (next.system) messages[0] = { role: "system", content: next.system }
@@ -130,6 +175,13 @@ export async function run(args: string[]) {
   }
 
   banner()
+
+  const persist = async () => {
+    if (!stored) return
+    stored.messages = messages
+    stored.agentId = agent.id
+    await saveSession(stored)
+  }
 
   const runTurn = async (userText: string) => {
     messages.push({ role: "user", content: userText })
@@ -168,6 +220,7 @@ export async function run(args: string[]) {
 
   if (prompt) {
     await runTurn(prompt)
+    await persist()
     return
   }
 
@@ -202,5 +255,6 @@ export async function run(args: string[]) {
       continue
     }
     await runTurn(line)
+    await persist()
   }
 }

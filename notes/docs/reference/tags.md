@@ -41,7 +41,7 @@ git checkout main
 | `notes-illustrations` | 文档快照 | [首页](/) | 白底笔记上的第一张线稿。不是新的 agent 阶段，`stage-07` 仍留给会话落盘 |
 | `stage-06-session` | 改为 `stage-07-session` | — | 06 留给搜索，勿再打这个名字 |
 | `stage-05-permissions` | 已并入 `stage-03-write` | [07](/guide/07-permissions) | 提前完成，勿再单独打这个名字的 tag |
-| `stage-07-session` | 计划中 | 11（待写） | messages 落盘；`chat --continue` |
+| `stage-07-session` | 计划中 | [11 会话](/guide/11-session) | messages 落盘；`chat --continue` |
 | `stage-07-search` | 已并入 `stage-06-search` | [10](/guide/10-search) | 提前做成 06，勿再单独打 tag |
 | `stage-08-edit` | 计划中 | 12（待写） | `edit`（局部补丁，非整文件 overwrite） |
 | `stage-09-agents` | 计划中 | 13（待写） | 多 agent / subagent 调度（explore 真跑起来） |
@@ -95,7 +95,7 @@ git checkout main
 | 必做 | 新开 session 打印 id；列表 `sessions` 命令（可极简） |
 | 不做 | 多设备同步、compaction、完整 Bus 事件 |
 | 验收 | 退出后再 `--continue`，模型仍记得上一轮写过的文件名 |
-| 文档 | 指南 **11 Session** |
+| 文档 | 指南 **[11 会话](/guide/11-session)** |
 
 ### `stage-08-edit`
 

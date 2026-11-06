@@ -20,9 +20,11 @@ Commands:
            models use <id|n>      # save model (also: models use go <id>)
            models local           # back to :8787 gateway
            models key set <oc_sk> # Go key, gitignored prefs
+  sessions List saved chats (rebuild/.sessions)
   chat     Chat + tools read/write/grep/glob/shell (default provider=local :8787)
            chat [--agent <id>] [--model <id>] [--provider local|zen|go|openai]
-                [--no-stream] [--ask-external|--allow-external] [prompt]
+                [--no-stream] [--ask-external|--allow-external]
+                [--continue [id]] [prompt]
            Interactive: starts at you>. /menu switches Zen / Go / local or agent
            /exit to quit
            Default: external paths need permission (ask)

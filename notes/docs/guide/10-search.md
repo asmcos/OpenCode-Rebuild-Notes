@@ -82,4 +82,4 @@ bun run chat
 - [ ] 非法正则返回 `Error: invalid pattern`，而不是抛到进程外面
 - [ ] 清楚：这不是 ripgrep，密钥文件默认不扫
 
-下一步：局部 `edit`，见 [阶段与 Tag](/reference/tags) 里的 `stage-08-edit`。会话落盘仍是 `stage-07-session`。
+下一步：[11 会话](/guide/11-session)（tag `stage-07-session`）。局部 `edit` 仍是 `stage-08-edit`。

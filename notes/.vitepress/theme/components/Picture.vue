@@ -16,6 +16,7 @@ const props = defineProps<{
     | "shellrun"
     | "finder"
     | "stages"
+    | "session"
 }>()
 
 const captions: Record<typeof props.name, string> = {
@@ -34,6 +35,7 @@ const captions: Record<typeof props.name, string> = {
   shellrun: "图 · 命令先准备，问过再跑",
   finder: "图 · 先用搜索定位，再打开文件",
   stages: "图 · 阶段 tag 走到搜索，后面还空着",
+  session: "图 · 这一轮对话写进文件，下次还能接着聊",
 }
 </script>
 
@@ -272,6 +274,20 @@ const captions: Record<typeof props.name, string> = {
           <rect x="170" y="80" width="16" height="11" rx="2" />
         </g>
         <text x="156" y="108" font-size="8" fill="#8b95a8">07–09</text>
+      </template>
+
+      <template v-else-if="name === 'session'">
+        <circle cx="100" cy="76" r="62" fill="#f2f7fc" />
+        <path d="M36 48 h28 l6 8 h22 v50 h-56 z" fill="#e9f1fa" stroke="#2f6fb0" stroke-width="1.5" />
+        <path d="M36 48 h28 l6 8 h-34 z" fill="#2f6fb0" />
+        <rect x="48" y="74" width="28" height="20" rx="2" fill="#ffffff" stroke="#9fb8d4" />
+        <path d="M52 80 h20 M52 86 h14" stroke="#c5d4e6" stroke-width="1.4" stroke-linecap="round" />
+        <path d="M112 78 h18" stroke="#d8502f" stroke-width="1.6" stroke-linecap="round" />
+        <path d="M126 74 l6 4 l-6 4" fill="none" stroke="#d8502f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M128 70 h-18" stroke="#2e7d4f" stroke-width="1.6" stroke-linecap="round" />
+        <path d="M114 66 l-6 4 l6 4" fill="none" stroke="#2e7d4f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <rect x="136" y="58" width="36" height="40" rx="4" fill="#ffffff" stroke="#2e7d4f" stroke-width="1.4" />
+        <path d="M142 70 h24 M142 78 h18 M142 86 h22" stroke="#b7d7c4" stroke-width="1.4" stroke-linecap="round" />
       </template>
     </svg>
     <figcaption>{{ captions[name] }}</figcaption>

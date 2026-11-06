@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "bash ../scripts/bun.sh run src/index.ts",
     "chat": "bash ../scripts/bun.sh run src/index.ts chat",
+    "sessions": "bash ../scripts/bun.sh run src/index.ts sessions",
     "models": "bash ../scripts/bun.sh run src/index.ts models"
   }
 }

@@ -56,8 +56,9 @@ bun run dev
 | `stage-04-shell` | 受控 `shell`，执行前询问 |
 | `stage-05-menu` | 菜单切换 Zen / Go / 本地模型。讲解：[09 启动菜单](notes/docs/guide/09-menu.md) |
 | `stage-06-search` | `grep` / `glob` 找文件。讲解：[10 搜索](notes/docs/guide/10-search.md) |
+| `stage-07-session` | 会话落盘，`chat --continue`。讲解：[11 会话](notes/docs/guide/11-session.md) |
 
-下一步还没做：会话落盘、局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。
+下一步还没做：局部编辑、子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。会话落盘的用法见 [11 会话](notes/docs/guide/11-session.md)。
 
 ## 基线
 
