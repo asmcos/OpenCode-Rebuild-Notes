@@ -69,6 +69,7 @@ export const EXPLORE_PERMISSIONS: PermissionRuleset = [
   { action: "external_directory", resource: "*", effect: "allow" },
   // Upstream explore allows shell — see packages/core/src/plugin/agent.ts
   { action: "shell", resource: "*", effect: "allow" },
+  { action: "subagent", resource: "*", effect: "deny" },
 ]
 
 /** Plan-like: no edits / no shell. */
@@ -80,4 +81,5 @@ export const PLAN_PERMISSIONS: PermissionRuleset = [
   { action: "read", resource: "*.env.*", effect: "ask" },
   { action: "read", resource: "*.env.example", effect: "allow" },
   { action: "external_directory", resource: "*", effect: "ask" },
+  { action: "subagent", resource: "*", effect: "deny" },
 ]

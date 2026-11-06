@@ -5,6 +5,7 @@
  * - packages/core/src/tool/plugin/read.ts
  * - packages/core/src/tool/plugin/write.ts
  * - packages/core/src/tool/plugin/edit.ts
+ * - packages/core/src/tool/plugin/subagent.ts
  * - packages/core/src/tool/plugin/shell.ts
  */
 
@@ -156,4 +157,25 @@ export const GLOB_TOOL = {
   },
 }
 
-export const TOOLS = [READ_TOOL, WRITE_TOOL, EDIT_TOOL, SHELL_TOOL, GREP_TOOL, GLOB_TOOL]
+export const SUBAGENT_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "subagent",
+    description:
+      "Run a read-only subagent and wait for its answer. Use agent explore to search the codebase. " +
+      "The prompt must include everything the child needs; it does not see this conversation. " +
+      "explore cannot write, edit, or spawn another subagent.",
+    parameters: {
+      type: "object",
+      properties: {
+        agent: { type: "string", description: 'Subagent id. Use "explore".' },
+        description: { type: "string", description: "Short label shown while it runs" },
+        prompt: { type: "string", description: "Self-contained task for the subagent" },
+      },
+      required: ["agent", "prompt"],
+      additionalProperties: false,
+    },
+  },
+}
+
+export const TOOLS = [READ_TOOL, WRITE_TOOL, EDIT_TOOL, SHELL_TOOL, GREP_TOOL, GLOB_TOOL, SUBAGENT_TOOL]

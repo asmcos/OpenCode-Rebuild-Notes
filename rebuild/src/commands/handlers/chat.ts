@@ -158,7 +158,7 @@ export async function run(args: string[]) {
     info(`${agent.id} · ${llm.model} · ${llm.provider}`)
     info(`session ${stored.id}${continueFlag ? ` · ${stored.title}` : ""}`)
     info(
-      `tools read, write, edit, grep, glob, shell · permissions external=${externalPolicy} shell=${shellPolicy}`,
+      `tools read, write, edit, grep, glob, shell, subagent · permissions external=${externalPolicy} shell=${shellPolicy}`,
     )
     if (!prompt) info("/menu 菜单 · ↑ 上一条 · /exit 退出")
     console.log()

@@ -10,11 +10,21 @@ import { writeFileTool } from "./write"
 import { editFileTool } from "./edit"
 import { shellTool } from "./shell"
 import { globTool, grepTool } from "./search"
+import { subagentTool } from "./subagent"
 import type { PermissionRuntime } from "../permission/assert"
+import type { LlmConfig } from "../llm/config"
 
 export type ToolRunContext = {
   cwd?: string
   permission?: PermissionRuntime
+  llm?: LlmConfig
+  stream?: boolean
+  /** 0 is the user-facing agent. A subagent runs at 1 and cannot dispatch again. */
+  depth?: number
+  onStatus?: (line: string) => void
+  onDelta?: (chunk: string) => void
+  onToolStart?: (name: string, args: string) => void
+  onTool?: (name: string, args: string, result: string) => void
 }
 
 export async function runTool(
@@ -92,6 +102,17 @@ export async function runTool(
       },
       cwd,
       context.permission,
+    )
+  }
+
+  if (name === "subagent") {
+    return subagentTool(
+      {
+        agent: typeof args.agent === "string" ? args.agent : undefined,
+        prompt: typeof args.prompt === "string" ? args.prompt : undefined,
+        description: typeof args.description === "string" ? args.description : undefined,
+      },
+      context,
     )
   }
 

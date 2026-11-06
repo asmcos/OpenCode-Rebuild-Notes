@@ -18,6 +18,7 @@ const props = defineProps<{
     | "stages"
     | "session"
     | "edit"
+    | "dispatch"
 }>()
 
 const captions: Record<typeof props.name, string> = {
@@ -38,6 +39,7 @@ const captions: Record<typeof props.name, string> = {
   stages: "图 · 阶段 tag 走到搜索，后面还空着",
   session: "图 · 这一轮对话写进文件，下次还能接着聊",
   edit: "图 · 只换文件里的一段，其余留着",
+  dispatch: "图 · build 把查找交给 explore，再收回答案",
 }
 </script>
 
@@ -276,6 +278,20 @@ const captions: Record<typeof props.name, string> = {
           <rect x="170" y="80" width="16" height="11" rx="2" />
         </g>
         <text x="156" y="108" font-size="8" fill="#8b95a8">07–09</text>
+      </template>
+
+      <template v-else-if="name === 'dispatch'">
+        <circle cx="100" cy="76" r="62" fill="#f2f7fc" />
+        <rect x="28" y="52" width="52" height="40" rx="4" fill="#ffffff" stroke="#1f2a44" stroke-width="1.5" />
+        <path d="M38 66 h32 M38 76 h22" stroke="#c5d4e6" stroke-width="1.6" stroke-linecap="round" />
+        <text x="36" y="48" font-size="8" fill="#1f2a44">build</text>
+        <path d="M86 64 h22" stroke="#d8502f" stroke-width="1.6" stroke-linecap="round" />
+        <path d="M104 60 l6 4 l-6 4" fill="none" stroke="#d8502f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M108 84 h-22" stroke="#2e7d4f" stroke-width="1.6" stroke-linecap="round" />
+        <path d="M90 80 l-6 4 l6 4" fill="none" stroke="#2e7d4f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <rect x="116" y="48" width="52" height="48" rx="4" fill="#e8f4ec" stroke="#2e7d4f" stroke-width="1.5" />
+        <text x="124" y="44" font-size="8" fill="#2e7d4f">explore</text>
+        <path d="M126 64 h32 M126 74 h24 M126 84 h28" stroke="#b7d7c4" stroke-width="1.6" stroke-linecap="round" />
       </template>
 
       <template v-else-if="name === 'edit'">

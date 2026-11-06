@@ -40,7 +40,11 @@ export type AgentLoopInput = {
    */
   maxSteps?: number
   stream?: boolean
+  /** Defaults to the full tool list. A child agent omits `subagent`. */
+  tools?: typeof TOOLS
   permission?: PermissionRuntime
+  /** Nesting depth. The subagent tool refuses to run above 0. */
+  depth?: number
   onStatus?: (line: string) => void
   onDelta?: (chunk: string) => void
   /** Fired when a tool starts (before permission / IO). */
@@ -69,7 +73,7 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
     }
 
     let message: Extract<ChatMessage, { role: "assistant" }>
-    const tools = textOnly ? null : TOOLS
+    const tools = textOnly ? null : (input.tools ?? TOOLS)
 
     if (llm.provider === "zen" || llm.provider === "go") {
       const result = await zenComplete({
@@ -117,6 +121,13 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
       const result = await runTool(name, args, {
         cwd,
         permission: input.permission,
+        llm,
+        stream: input.stream,
+        depth: input.depth ?? 0,
+        onStatus: input.onStatus,
+        onDelta: input.onDelta,
+        onToolStart: input.onToolStart,
+        onTool: input.onTool,
       })
       input.onTool?.(name, args, result)
       messages.push({

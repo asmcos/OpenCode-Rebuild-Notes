@@ -50,9 +50,10 @@
   <Card href="/guide/10-search" no="10" title="搜索">tag stage-06-search。先找到文件，再去读。</Card>
   <Card href="/guide/11-session" no="11" title="会话">退出后再接着聊。</Card>
   <Card href="/guide/12-tool-edit" no="12" title="局部修改">只换文件里的一段，对不上就不写。</Card>
+  <Card href="/guide/13-agents" no="13" title="子 agent">build 派出只读的 explore。</Card>
 </Grid>
 
-<p class="oc-note">后面还空着真正派出 explore（stage-09）。</p>
+<p class="oc-note">必做的阶段到子 agent 为止。再往后是选做。</p>
 
 ## 为什么做这个项目
 

@@ -2,7 +2,7 @@
 
 对照 [OpenCode](https://github.com/anomalyco/opencode) 的源码，从零搭一个能对话、读文件、改文件、跑命令的迷你 coding agent。每完成一块就有文档和 git tag，克隆下来就能跑，不必先读完上游。
 
-当前进度：**`stage-08-edit`**。模型可以用 `edit` 只改文件里的一段。退出后 `bun run chat --continue` 还能接着聊；`/menu` 切换 **Zen 免费模型**、**OpenCode Go** 或本地网关。
+当前进度：**`stage-09-agents`**。`build` 可以用 `subagent` 派出只读的 `explore`。`edit` 改文件里的一段，退出后 `bun run chat --continue` 还能接着聊；`/menu` 切换 **Zen 免费模型**、**OpenCode Go** 或本地网关。
 
 ## 三分钟试一次
 
@@ -58,8 +58,9 @@ bun run dev
 | `stage-06-search` | `grep` / `glob` 找文件。讲解：[10 搜索](notes/docs/guide/10-search.md) |
 | `stage-07-session` | 会话落盘，`chat --continue`。讲解：[11 会话](notes/docs/guide/11-session.md) |
 | `stage-08-edit` | `edit` 按原文替换一段。讲解：[12 局部修改](notes/docs/guide/12-tool-edit.md) |
+| `stage-09-agents` | `build` 派出只读 `explore`。讲解：[13 子 agent](notes/docs/guide/13-agents.md) |
 
-下一步还没做：子 agent。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。局部修改的用法见 [12 局部修改](notes/docs/guide/12-tool-edit.md)。
+下一步是选做。说明在文档站的 [阶段与 Tag](notes/docs/reference/tags.md)。子 agent 的用法见 [13 子 agent](notes/docs/guide/13-agents.md)。
 
 ## 基线
 

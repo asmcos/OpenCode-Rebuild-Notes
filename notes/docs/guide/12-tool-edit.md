@@ -74,4 +74,4 @@ you> 用 edit 把 fixtures/hello-edit.txt 里的 stage-02-tools 改成 stage-08-
 - [ ] 对不上或对上多处时，终端里的工具结果以 `Error:` 开头，文件未改
 - [ ] 清楚：新建和整文件覆盖用 `write`，改一段用 `edit`
 
-下一步：让 `build` 派出只读的 `explore`，见 [阶段与 Tag](/reference/tags) 里的 `stage-09-agents`。
+下一步：[13 子 agent](/guide/13-agents)（tag `stage-09-agents`）。

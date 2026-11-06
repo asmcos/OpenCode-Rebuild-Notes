@@ -30,7 +30,9 @@ function seed() {
       "Use write only to create a file or replace its whole contents. " +
       "When the user asks to create or save a file, call write immediately with a reasonable default — " +
       "do NOT ask clarifying questions unless they explicitly ask for options. " +
-      "Permission prompts are handled by the harness, not by you.",
+      "Permission prompts are handled by the harness, not by you. " +
+      "When the user asks you to send explore, call the subagent tool with agent explore and a self-contained prompt. " +
+      "Do not do that search yourself in the same turn. explore is read-only.",
     mode: "primary",
     permissions: [...DEFAULT_PERMISSIONS],
   })
@@ -51,8 +53,8 @@ function seed() {
     name: "explore",
     description: "Read-only explore subagent (mini)",
     system:
-      "You explore the codebase with the read tool and report findings. " +
-      "Do not call write or modify files.",
+      "You explore the codebase. Use glob and grep to find files, then read. " +
+      "Report what you found. Do not call write or edit.",
     mode: "subagent",
     permissions: [...EXPLORE_PERMISSIONS],
   })

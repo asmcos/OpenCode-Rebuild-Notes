@@ -44,7 +44,7 @@ git checkout main
 | `stage-07-session` | 已发布 | [11 会话](/guide/11-session) | messages 落盘；`chat --continue` |
 | `stage-07-search` | 已并入 `stage-06-search` | [10](/guide/10-search) | 提前做成 06，勿再单独打 tag |
 | `stage-08-edit` | 已发布 | [12 局部修改](/guide/12-tool-edit) | `edit`：唯一匹配才替换；失败不改文件 |
-| `stage-09-agents` | 计划中 | 13（待写） | 多 agent / subagent 调度（explore 真跑起来） |
+| `stage-09-agents` | 已发布 | [13 子 agent](/guide/13-agents) | `build` 用 `subagent` 派出只读 `explore` |
 | `stage-10-…` | 选做 | — | webfetch、todo、轻量 TUI、MCP 等 |
 
 > **状态说明**：「计划中」= 尚未打 tag；「已发布」= 仓库里已有该 tag；「已并入」= 内容落在别的 tag，编号保留以免读者迷路。
@@ -117,7 +117,7 @@ git checkout main
 | 必做 | explore 的 permissions 已 deny edit——真跑一轮验证 |
 | 不做 | 并行多子 agent、完整 job 系统 |
 | 验收 | 「让 explore 查一下 permission 目录有哪些文件」→ 有子 agent 轨迹 |
-| 文档 | 指南 **13 多 Agent** |
+| 文档 | 指南 **[13 子 agent](/guide/13-agents)** |
 
 ### 选做（`stage-10-…`）
 
@@ -128,8 +128,8 @@ git checkout main
 ## 推荐学习顺序（时间线）
 
 ```text
-已发布:  00 → 01 → 02 → 03 → 04-shell → 05-menu → 06-search → 07-session → 08-edit
-接下来:  09-agents
+已发布:  00 → 01 → 02 → 03 → 04-shell → 05-menu → 06-search → 07-session → 08-edit → 09-agents
+接下来:  选做 10+
 选做:    10+
 ```
 

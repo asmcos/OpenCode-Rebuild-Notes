@@ -21,7 +21,7 @@ Commands:
            models local           # back to :8787 gateway
            models key set <oc_sk> # Go key, gitignored prefs
   sessions List saved chats (rebuild/.sessions)
-  chat     Chat + tools read/write/edit/grep/glob/shell (default provider=local :8787)
+  chat     Chat + tools read/write/edit/grep/glob/shell/subagent (default provider=local :8787)
            chat [--agent <id>] [--model <id>] [--provider local|zen|go|openai]
                 [--no-stream] [--ask-external|--allow-external]
                 [--continue [id]] [prompt]
