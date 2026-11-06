@@ -1,10 +1,14 @@
 /**
  * Mini agent loop: complete → run tools → complete again.
  *
- * Inspired by (upstream / example relative paths):
- * - packages/core/src/tool/runtime.ts
- * - packages/core/src/session (runner concept)
- * - zen-free-agent/index.mjs  (agentAsk)
+ * Upstream (packages/schema/src/agent.ts): `steps` is optional. The default
+ * agent does not set it, so one user turn keeps going while the model calls
+ * tools. A configured limit forces a text-only reply
+ * (packages/core/src/session/runner/max-steps.ts,
+ * packages/core/src/session/runner/step.ts when toolChoice is none).
+ * The next user message starts a fresh turn. Long sessions stay alive by
+ * compacting context (packages/core/src/session/compaction.ts), not by
+ * aborting the loop.
  */
 
 import type { ChatMessage } from "./messages"
@@ -14,13 +18,26 @@ import { openaiComplete } from "./openai-stream"
 import { runTool } from "../tool/run"
 import { newSessionID } from "./zen-id"
 import type { PermissionRuntime } from "../permission/assert"
+import { TOOLS } from "../tool/defs"
 
-const DEFAULT_MAX_STEPS = 8
+/** Shown once, when a configured step budget is spent. Tools stay off for this call. */
+const STEP_LIMIT_PROMPT = `本轮工具步数已到上限。从现在到用户下一次发言，不要再调用工具。
+
+用文字说明：
+- 已经做完的事
+- 还没做完的事
+- 建议用户下一步说什么
+
+只回复文字。`
 
 export type AgentLoopInput = {
   llm: LlmConfig
   messages: ChatMessage[]
   cwd?: string
+  /**
+   * Tool rounds allowed in this user turn. Unset means no cap: stop when the
+   * model replies with text. When set, the next call is text-only.
+   */
   maxSteps?: number
   stream?: boolean
   permission?: PermissionRuntime
@@ -32,20 +49,27 @@ export type AgentLoopInput = {
 }
 
 export async function agentLoop(input: AgentLoopInput): Promise<string> {
-  const maxSteps = input.maxSteps ?? DEFAULT_MAX_STEPS
+  const maxSteps = input.maxSteps
   const cwd = input.cwd ?? process.cwd()
   const sessionID = newSessionID()
   const messages = input.messages
   const { llm } = input
 
-  for (let step = 0; step < maxSteps; step++) {
-    input.onStatus?.(
-      step === 0
-        ? `calling model (${llm.provider}/${llm.model})…`
-        : `calling model again (step ${step + 1}/${maxSteps})…`,
-    )
+  for (let step = 0; ; step++) {
+    const textOnly = maxSteps !== undefined && step >= maxSteps
+    if (textOnly) {
+      messages.push({ role: "user", content: STEP_LIMIT_PROMPT })
+      input.onStatus?.("step limit reached, asking for a text summary…")
+    } else {
+      input.onStatus?.(
+        step === 0
+          ? `calling model (${llm.provider}/${llm.model})…`
+          : `calling model again (step ${step + 1})…`,
+      )
+    }
 
     let message: Extract<ChatMessage, { role: "assistant" }>
+    const tools = textOnly ? null : TOOLS
 
     if (llm.provider === "zen" || llm.provider === "go") {
       const result = await zenComplete({
@@ -57,6 +81,7 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
         cwd,
         apiKey: llm.provider === "go" ? llm.apiKey : undefined,
         onDelta: input.onDelta,
+        tools,
       })
       message = result.message
     } else {
@@ -67,12 +92,16 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
         messages: withZenEnv(messages, cwd),
         stream: input.stream !== false,
         onDelta: input.onDelta,
+        tools,
       })
     }
 
+    if (textOnly && message.tool_calls?.length) {
+      message = { role: "assistant", content: message.content }
+    }
     messages.push(message)
 
-    if (!message.tool_calls?.length) {
+    if (textOnly || !message.tool_calls?.length) {
       const text = message.content || ""
       if (text && !text.endsWith("\n")) process.stdout.write("\n")
       return text
@@ -97,6 +126,4 @@ export async function agentLoop(input: AgentLoopInput): Promise<string> {
       })
     }
   }
-
-  throw new Error(`agent loop exceeded maxSteps=${maxSteps}`)
 }

@@ -20,7 +20,7 @@
 | `packages/core/src/tool/read-filesystem.ts` | 读文件实现 |
 | `packages/core/src/tool/runtime.ts` | 工具运行时 |
 
-教学版不搬 Effect，逻辑更接近示例里的 `agentAsk` 循环。
+教学版不搬 Effect。一次用户发言里，模型还在调用工具就继续；默认没有 8 步封顶。上游 `Agent.Info.steps` 也是可选的，默认 agent 不设这个数（`packages/schema/src/agent.ts`）。设了上限时，到点关掉工具，让模型用文字收尾（`packages/core/src/session/runner/max-steps.ts`），下一句用户输入再打开工具。几十、上百轮能接着做，靠的是上下文快满时压缩旧对话（`packages/core/src/session/compaction.ts`），不是把循环判成错误。
 
 ## 5.2 本仓库代码落点
 

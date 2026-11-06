@@ -11,7 +11,7 @@ export type OpenAIStreamInput = {
   model: string
   apiKey?: string
   messages: ChatMessage[]
-  tools?: typeof TOOLS
+  tools?: typeof TOOLS | null
   stream?: boolean
   onDelta?: (chunk: string) => void
 }
@@ -52,7 +52,7 @@ export async function openaiComplete(
   input: OpenAIStreamInput,
 ): Promise<Extract<ChatMessage, { role: "assistant" }>> {
   const stream = input.stream !== false
-  const tools = input.tools ?? TOOLS
+  const tools = input.tools === null ? undefined : (input.tools ?? TOOLS)
 
   const res = await fetch(`${input.baseURL}/chat/completions`, {
     method: "POST",
@@ -62,7 +62,7 @@ export async function openaiComplete(
       stream,
       max_completion_tokens: 2048,
       messages: input.messages,
-      tools,
+      ...(tools ? { tools } : {}),
     }),
   })
 

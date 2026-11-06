@@ -20,7 +20,8 @@ export type ZenCompleteInput = {
   messages: ChatMessage[]
   sessionID?: string
   cwd?: string
-  tools?: typeof TOOLS
+  /** `null` omits tools so the model can only answer in text. */
+  tools?: typeof TOOLS | null
   /** Go uses `Bearer oc_sk_…`. Zen omits this and sends `Bearer public`. */
   apiKey?: string
   onDelta?: (chunk: string) => void
@@ -73,7 +74,7 @@ export async function zenComplete(
 ): Promise<{ sessionID: string; message: Extract<ChatMessage, { role: "assistant" }> }> {
   const sessionID = input.sessionID ?? newSessionID()
   const messages = withZenEnv(input.messages, input.cwd)
-  const tools = input.tools ?? TOOLS
+  const tools = input.tools === null ? undefined : (input.tools ?? TOOLS)
 
   const res = await fetch(`${input.baseURL}/chat/completions`, {
     method: "POST",
@@ -83,7 +84,7 @@ export async function zenComplete(
       stream: true,
       max_completion_tokens: 2048,
       messages,
-      tools,
+      ...(tools ? { tools } : {}),
     }),
   })
 
