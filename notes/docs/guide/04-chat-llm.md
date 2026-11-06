@@ -1,6 +1,6 @@
 # 04 接真实模型：最小 Chat
 
-目标：用上一章的 **agent.system** 当角色提示，接上真实模型，**不必配置个人 API Key**。当前 tag `stage-05-menu` 的入口是 `bun run chat` 的启动菜单（Zen 免费 / Go / 本地网关）。本章先把本地网关和直连讲清楚。
+目标：用上一章的 **agent.system** 当角色提示，接上真实模型，**不必配置个人 API Key**。换 Zen 免费 / Go / 本地网关时，在 `you>` 里输入 `/menu`（[09 菜单](/guide/09-menu)）。本章先把本地网关和直连讲清楚。
 
 预计时间：40–60 分钟。对应已发布 tag：`stage-01-chat`（含 03 的 agent 形状 + 本章 chat）。
 
@@ -103,9 +103,9 @@ bun run chat
 | agent.system 差异 | permissions、TUI、持久 Session |
 | Zen 免费与 Go 互切，`models` 只列 free | 完整 provider catalog、付费模型 |
 
-## 4.6 启动菜单
+## 4.6 菜单
 
-Zen / Go / 本地的切换菜单是单独一课，对应 tag `stage-05-menu`：[09 启动菜单](/guide/09-menu)。
+Zen / Go / 本地的切换在对话里输入 `/menu`，对应 tag `stage-05-menu`：[09 菜单](/guide/09-menu)。
 
 本章仍保留命令行选法，方便不进菜单时使用：
 

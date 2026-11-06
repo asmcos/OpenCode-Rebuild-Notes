@@ -5,7 +5,7 @@
 
 import { list } from "../agent/registry"
 import type { AgentInfo } from "../agent/info"
-import { askLine } from "./tty"
+import { askLine, askMenu } from "./tty"
 import { loadLlmConfig, type LlmConfig } from "../llm/config"
 import { listSelectableModels, rememberModel } from "../commands/handlers/models"
 
@@ -89,7 +89,7 @@ export async function sessionMenu(current: SessionChoice): Promise<SessionChoice
     console.log("  4) 本地网关模型")
     console.log("  5) 切换 agent")
     console.log("  q) 退出")
-    const answer = (await askLine("选择> ")).toLowerCase()
+    const answer = await askMenu("选择> ")
     if (answer === "q" || answer === "quit" || answer === "exit") return null
     if (answer === "1" || answer === "") return { agent, llm }
     if (answer === "2" || answer === "3" || answer === "4") {

@@ -1,13 +1,13 @@
 # 09 启动菜单：切换 Zen / Go
 
-目标：交互式 `bun run chat` 先停在菜单上。用菜单切换 **Zen 免费**、**OpenCode Go**、**本地网关**，或换一个 agent，再进入 `you>`。测试时不用改配置文件就能换模型。
+目标：`bun run chat` 直接进入 `you>`。要换 **Zen 免费**、**OpenCode Go**、**本地网关**或 agent 时，输入 `/menu`。测试时不用改配置文件就能换模型。
 
 预计时间：20–30 分钟。对应 tag：`stage-05-menu`。
 
 指南编号和 tag 编号不是同一套数。指南 05 仍是 [工具 read](/guide/05-tool-read)；本课是 tag **05**，因为菜单才是 Zen / Go 的切换入口。
 
-::: tip 带一句话启动会跳过菜单
-`bun run chat "只回复：OK"` 直接用当前保存的模型。要看到菜单，不要在命令后面写 prompt。
+::: tip 带一句话启动不会进对话循环
+`bun run chat "只回复：OK"` 用当前保存的模型答完就退出。要换模型，先进入 `you>`，再输入 `/menu`。
 :::
 
 ## 9.1 先看上游在选什么
@@ -19,11 +19,11 @@
 | `packages/tui/src/component/dialog-model.tsx` | 会话里选模型 |
 | `packages/tui/src/component/dialog-model-free.tsx` | 免费模型单独列出来 |
 
-本地示例 `zen-free-agent` 用 `/zen`、`/go`、`/models` 做同样的事。本课把这三步放进 `chat` 启动时的一张菜单。
+本地示例 `zen-free-agent` 用 `/zen`、`/go`、`/models` 做同样的事。本课把这三步收成对话里的 `/menu`。
 
 ## 9.2 你会看到什么
 
-启动时先停在菜单。选模型之后才进入 `you>`。对话中途输入 `/menu` 可以再打开一次。
+启动后直接是 `you>`，用的是上次保存的模型。输入 `/menu` 才出现这张菜单。上方向键翻这一次对话里已经发出去的句子，退出程序后就不在了。
 
 <Picture name="endpoints" />
 
@@ -37,8 +37,9 @@ bun run chat
 ```text
 build · beam-free · local
 tools read, write, shell · permissions external=ask shell=ask
-/menu 菜单 · /exit 退出
+/menu 菜单 · ↑ 上一条 · /exit 退出
 
+you> /menu
 菜单
   1) 开始对话   build · beam-free · local
   2) Zen 免费模型
@@ -59,7 +60,7 @@ tools read, write, shell · permissions external=ask shell=ask
 | `0` | 从模型列表或 agent 列表返回，不改当前选择 |
 | `q` | 退出 |
 
-选中一个模型后，头一行会换成新的组合，例如 `build · big-pickle · zen`，然后出现 `you>`。对话中途输入 `/menu` 可以再换一次。
+选中一个模型后，印出 `进入对话 · build · big-pickle · zen` 这样一行，然后回到 `you>`。
 
 `*` 标的是这一侧记住的模型。Zen 和 Go 各自记自己的上次选择，来回切不会互相覆盖。选择写在 gitignore 的 `rebuild/.rebuild-llm.json`。
 
@@ -133,4 +134,4 @@ bun run chat --provider zen --model big-pickle "只回复：OK"
 - [ ] `bun run chat "只回复：OK"` 不出现菜单
 - [ ] 清楚：`*contributor*` 和付费 id 不会进 Zen / Go 列表
 
-下一步：[10 grep / glob](/guide/10-search)（tag `stage-06-search`）。
+下一步：[10 搜索](/guide/10-search)（tag `stage-06-search`）。

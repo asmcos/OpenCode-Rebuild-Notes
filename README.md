@@ -14,7 +14,7 @@ cd OpenCode-Rebuild-Notes/rebuild
 bun run chat
 ```
 
-菜单里选 **2) Zen 免费模型**，再选一个序号，然后输入：
+进入 `you>` 后输入 `/menu`，选 **2) Zen 免费模型**，再选一个序号，然后输入：
 
 ```text
 读一下仓库根目录的 README.md，用三句话说明这个项目能做什么
@@ -35,7 +35,7 @@ bun run dev
 
 | 能力 | 你怎么用到它 |
 |------|----------------|
-| 选模型和 agent | `bun run chat` 的启动菜单，或对话中的 `/menu` |
+| 选模型和 agent | 对话里输入 `/menu` |
 | 免费模型 | Zen：`Bearer public`；Go：你的 key。列表里只有 free 模型 |
 | 读、写、执行命令 | 让它读文件、写文件、跑 `ls` 这类命令 |
 | 权限 | 写仓库外路径、跑 shell 时会停下来问你 |

@@ -114,7 +114,7 @@ export async function run(args: string[]) {
     const shellPolicy = evaluate("shell", "*", permission.rules, permission.saved).effect
     info(`${agent.id} · ${llm.model} · ${llm.provider}`)
     info(`tools read, write, grep, glob, shell · permissions external=${externalPolicy} shell=${shellPolicy}`)
-    if (!prompt) info("/menu 菜单 · /exit 退出")
+    if (!prompt) info("/menu 菜单 · ↑ 上一条 · /exit 退出")
     console.log()
   }
 
@@ -130,14 +130,6 @@ export async function run(args: string[]) {
   }
 
   banner()
-
-  if (!prompt && process.stdin.isTTY) {
-    const chosen = await sessionMenu({ agent, llm })
-    if (!chosen) return
-    bindAgent(chosen.agent)
-    llm = chosen.llm
-    banner()
-  }
 
   const runTurn = async (userText: string) => {
     messages.push({ role: "user", content: userText })
@@ -181,8 +173,17 @@ export async function run(args: string[]) {
 
   // REPL: create readline ONLY while waiting for you>; close before each turn
   // so permission> can own stdin (otherwise the session appears frozen).
+  // History lives on that interface, so keep one list and pass it back.
+  // Upstream: packages/tui/src/prompt/history.tsx (up/down through submitted prompts).
+  const promptHistory: string[] = []
   while (true) {
-    const rl = readline.createInterface({ input, output })
+    const rl = readline.createInterface({
+      input,
+      output,
+      history: promptHistory,
+      historySize: 50,
+      removeHistoryDuplicates: true,
+    })
     let line: string
     try {
       line = (await rl.question("you> ")).trim()
@@ -196,7 +197,8 @@ export async function run(args: string[]) {
       if (!chosen) break
       bindAgent(chosen.agent)
       llm = chosen.llm
-      banner()
+      info(`进入对话 · ${agent.id} · ${llm.model} · ${llm.provider}`)
+      console.log()
       continue
     }
     await runTurn(line)
